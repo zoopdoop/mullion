@@ -1,18 +1,24 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 
+const isDev = require("electron-is-dev")
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      worldSafeExecuteJavaScript: true,
+      contextIsolation: true
     },
     width: 800,
   });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../index.html"));
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../dist/index.html")}`
+  );
 }
 
 // This method will be called when Electron has finished

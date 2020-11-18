@@ -1,30 +1,58 @@
 {
-  "name": "electron-quick-start-typescript",
-  "version": "1.0.0",
-  "description": "A minimal Electron application written with Typescript",
+  "name": "mullion",
+  "version": "0.0.1",
+  "description": "Multi-pane browser powered by Electron",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "npm run build && electron ./dist/main.js"
+    "react-start": "parcel -p 3000 index.html --out-dir dist",
+    "react-build": "parcel build index.html --out-dir dist --public-url ./",
+    "main-build": "tsc src/main.ts --outDir dist",
+    "start": "npm run main-build && concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron ./dist/main.js\"",
+    "electron-build": "electron-builder -mwl",
+    "build": "npm run clean-build && npm run react-build && npm run electron-build",
+    "lint": "eslint -c .eslintrc --ext .ts ./src"
   },
-  "repository": "https://github.com/electron/electron-quick-start-typescript",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo",
-    "typescript"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "build": {
+    "appId": "com.zoopdoop.mullion",
+    "files": ["src/electron.js", "src/assets/*", "build/**/*"],
+    "mac": {
+      "target": "dmg",
+      "icon": "src/assets/logo.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/logo.png"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "src/assets/logo.png",
+      "category": "Development"
+    }
+  },  
+  "repository": "https://github.com/zoopdoop/mullion",
+  "author": "Doug Martin",
+  "license": "MIT",
   "devDependencies": {
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "concurrently": "^5.3.0",
+    "cross-env": "^7.0.2",
+    "electron": "^9.3.4",
+    "electron-builder": "^22.9.1",
     "eslint": "^7.3.1",
-    "electron": "^9.3.1",
-    "typescript": "^3.9.5"
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.9.7",
+    "wait-on": "^5.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-is-dev": "^1.2.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
 }

@@ -7,7 +7,9 @@
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "jsx": "react"
   },
   "include": [
     "src/**/*"

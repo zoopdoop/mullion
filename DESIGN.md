@@ -18,17 +18,22 @@ React is used for the app for all UI (except for the BrowserViews).  This the he
 
 ```
 App
+  AppTabBar
   AppTabs
-  AppTab
-    AppTabToolbar
-      PaneNavigation
-    PrimaryPane
-    Splitter
-    SecondaryPane
-      SecondaryPaneTabs
-      SecondaryPaneTab
-      SecondaryPaneTabToolbar
-        SecondaryPaneInfo
+    AppTab
+      AppTabToolbar
+        PaneNavigation
+      AppTabPanes
+        PrimaryPane
+          DummyPane
+        Splitter
+        SecondaryPane
+          SecondaryPaneTabBar
+          SecondaryPaneTabs
+            SecondaryPaneTab
+              SecondaryPaneTabToolbar
+                SecondaryPaneInfo
+              DummyPane
 ```
 
 

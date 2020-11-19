@@ -1,3 +1,8 @@
+$app-tab-height: 30px;
+
+$splitter-width: 5px;
+$splitter-color: #777;
+
 html, body {
   padding: 0;
   margin: 0;
@@ -5,6 +10,7 @@ html, body {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  user-select: none;
 }
 
 .app {
@@ -14,11 +20,63 @@ body {
   height: 100vh;
 }
 
-$app-tab-height: 30px;
-.app-tabs {
+.app-tab-bar {
   flex-grow: 0;
 }
 
-.pane {
+.app-tabs {
   flex-grow: 1;
+}
+
+.app-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-tab-toolbar {
+  flex-grow: 0;
+}
+
+.pane-navigation {
+}
+
+.app-tab-panes {
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.primary-pane {
+  flex-grow: 1;
+}
+
+.splitter {
+  flex-grow: 0;
+  width: $splitter-width;
+  background-color: $splitter-color;
+  cursor: ew-resize;
+}
+
+.secondary-pane {
+  flex-grow: 1;
+}
+
+.secondary-pane-tab-bar {
+}
+
+.secondary-pane-tabs {
+}
+
+.secondary-pane-tab {
+}
+
+.secondary-pane-tab-toolbar {
+}
+
+.secondary-pane-info {
+}
+
+.dummy-pane {
 }

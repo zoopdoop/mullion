@@ -14,6 +14,7 @@ function createWindow() {
     width: 800,
   });
 
+  /*
   // proof of concept with two pane Google search
 
   let twoPanes = false
@@ -54,6 +55,7 @@ function createWindow() {
   })
 
   mainWindow.on("resize", () => layout())
+  */
 
   mainWindow.loadURL(
     isDev

@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mullion</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws:; script-src 'self';" />
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self' ws:; script-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws:; script-src 'self' 'unsafe-eval';" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self' ws:; script-src 'self' 'unsafe-eval';" />
+    <link type="text/css" rel="stylesheet" href="./index.scss" />
   </head>
   <body>
     <div id="root"></div>
-    <script src="./src/index.tsx"></script>
+    <script src="./index.tsx"></script>
   </body>
 </html>

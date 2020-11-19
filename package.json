@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Multi-pane browser powered by Electron",
   "scripts": {
-    "react-start": "parcel -p 3000 index.html --out-dir dist",
-    "react-build": "parcel build index.html --out-dir dist --public-url ./",
+    "react-start": "parcel -p 3000 src/index.html --out-dir dist",
+    "react-build": "parcel build src/index.html --out-dir dist --public-url ./",
     "main-build": "tsc src/main.ts --outDir dist",
     "start": "npm run main-build && concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron ./dist/main.js\"",
     "electron-build": "electron-builder -mwl",

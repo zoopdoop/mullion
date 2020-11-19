@@ -24,16 +24,17 @@ App
       AppTabToolbar
         PaneNavigation
       AppTabPanes
-        PrimaryPane
-          DummyPane
-        Splitter
-        SecondaryPane
-          SecondaryPaneTabBar
-          SecondaryPaneTabs
-            SecondaryPaneTab
-              SecondaryPaneTabToolbar
-                SecondaryPaneInfo
-              DummyPane
+        AppTabPane
+          PrimaryPane
+            DummyPane
+          Splitter
+          SecondaryPane
+            SecondaryPaneTabBar
+            SecondaryPaneTabs
+              SecondaryPaneTab
+                SecondaryPaneTabToolbar
+                  SecondaryPaneInfo
+                DummyPane
 ```
 
 

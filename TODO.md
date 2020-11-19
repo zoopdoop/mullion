@@ -8,13 +8,20 @@
 
 ### Todo
 
-- [ ] Create simple top level component with nav and split browser area with two panes using proof of concept google search  
-- [ ] Add splitter to resize split browser area  
 - [ ] Find React tabs component with drag reorder and RTL support  
-- [ ] Add tabs using simple top level component  
-- [ ] Add nav to top level component  
-- [ ] Add tabs to secondary pane in top level component  
-- [ ] Add control and shift click to open in new tab/subtab  
+- [ ] Implement AppTabBar (add, delete, move tabs)
+- [ ] Implement AppTabs (show selected AppTab)
+- [ ] Implement partial AppTab (split status, primary url)
+- [ ] Implement partial DummyPane (show url)
+- [ ] Implement partial PaneNavigation (url input box and load url)
+- [ ] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)
+- [ ] Extend partial AppTab (show split and secondary pane)
+- [ ] Implement partial SecondaryPaneInfo (show url)
+- [ ] Implement SecondaryPaneTabBar
+- [ ] Implement SecondaryPaneTabs
+- [ ] Extend partial PrimaryPane (add push to secondary url list using control click)
+- [ ] Implement Splitter
+- [ ] Implement BrowserView manager in main renderer (CRUD per pane, manages resizing with splitter/window resize)
 
 ### In Progress
 

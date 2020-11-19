@@ -43,8 +43,12 @@ body {
 
 .app-tab-panes {
   height: 100%;
-  display: flex;
   flex-grow: 1;
+}
+
+.app-tab-pane {
+  height: 100%;
+  display: flex;
   justify-content: space-between;
 }
 

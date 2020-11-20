@@ -21,7 +21,40 @@ body {
 }
 
 .app-tab-bar {
+  min-height: 20px;
   flex-grow: 0;
+  display: flex;
+  padding: 3px 5px 0 5px;
+  background-color: #eee;
+
+  .app-tab-bar-add-button {
+    border: none;
+    outline: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+}
+
+.app-tab-bar-tab {
+  padding: 3px 10px;
+  border-radius: 5px 5px 0 0;
+  border: 1px solid #000;
+  border-bottom: none;
+  outline: none;
+
+  &.selected {
+    background-color: #fff;
+  }
+
+  .close {
+    margin-left: 10px;
+    font-size: 1.1em;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
 }
 
 .app-tabs {

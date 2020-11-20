@@ -4,9 +4,10 @@
   "description": "Multi-pane browser powered by Electron",
   "scripts": {
     "react-start": "parcel -p 3000 src/index.html --out-dir dist",
-    "react-build": "parcel build src/index.html --out-dir dist --public-url ./",
+    "react-build": "parcel build src/index.html --out-dir dist --public-url ./ --target electron",
     "main-build": "tsc src/main.ts --outDir dist",
-    "start": "npm run main-build && concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron ./dist/main.js\"",
+    "preload-build": "tsc src/preload.ts --outDir dist",
+    "start": "npm run main-build && npm run preload-build && concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron ./dist/main.js\"",
     "electron-build": "electron-builder -mwl",
     "build": "npm run clean-build && npm run react-build && npm run electron-build",
     "lint": "eslint -c .eslintrc --ext .ts ./src"

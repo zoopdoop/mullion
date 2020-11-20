@@ -1,29 +1,32 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PrimaryPane from "./primary-pane"
 import Splitter from "./splitter"
 import SecondaryPane from "./secondary-pane"
 import { IAppTab } from "../models/app-tab"
-import { INTERNAL_START_URL } from "../lib/internal-urls"
 
 interface Props {
   appTab: IAppTab
+  visible: boolean
   navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const AppTabPanes: React.FC<Props> = ({ appTab, navigateToUrl }) => {
+const AppTabPanes: React.FC<Props> = ({ appTab, visible, navigateToUrl }) => {
+
+  useEffect(() => {
+    if (visible && (appTab.secondaryUrls.length === 0)) {
+      // TODO: report secondary pane hidden
+      console.log("hide secondary", {appTabId: appTab.id})
+    }
+  }, [appTab.secondaryUrls, visible])
 
   const renderPanes = () => {
-    if (appTab.primaryUrl === null) {
-      return <PrimaryPane appTab={appTab} url={INTERNAL_START_URL} navigateToUrl={navigateToUrl} />
-    }
-
     if (appTab.secondaryUrls.length === 0) {
-      return <PrimaryPane appTab={appTab} url={appTab.primaryUrl} navigateToUrl={navigateToUrl} />
+      return <PrimaryPane appTab={appTab} visible={visible} navigateToUrl={navigateToUrl} />
     }
 
     return (
       <>
-        <PrimaryPane appTab={appTab} url={appTab.primaryUrl} navigateToUrl={navigateToUrl} />
+        <PrimaryPane appTab={appTab} visible={visible} navigateToUrl={navigateToUrl} />
         <Splitter />
         <SecondaryPane />
       </>

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, BrowserView } from "electron";
+import { app, BrowserWindow, globalShortcut, BrowserView } from "electron";
 import * as path from "path";
 
 const isDev = require("electron-is-dev")
@@ -9,10 +9,15 @@ function createWindow() {
     height: 600,
     webPreferences: {
       worldSafeExecuteJavaScript: true,
-      contextIsolation: true
+      contextIsolation: true,
+      preload: path.join(app.getAppPath(), 'preload.js')
     },
     width: 800,
+    // autoHideMenuBar: true
   });
+  // mainWindow.setMenu(null)
+
+  mainWindow.webContents.openDevTools()
 
   /*
   // proof of concept with two pane Google search
@@ -57,6 +62,25 @@ function createWindow() {
   mainWindow.on("resize", () => layout())
   */
 
+  const sendMainProcessMessage = (message: string, ...args: any[]) => {
+    mainWindow.webContents.send("main-process-message", message, ...args)
+  }
+
+  mainWindow.webContents.on("before-input-event", (e, input) => {
+    if (input.control) {
+      const key = input.key.toLowerCase()
+      switch (key) {
+        case "n":
+          sendMainProcessMessage("add-new-tab")
+          // mainWindow.webContents.send("add-new-tab")
+          break;
+        default:
+          return
+      }
+      e.preventDefault()
+    }
+  })
+
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
@@ -67,7 +91,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", () => {
+app.whenReady().then(() => {
   createWindow();
 
   app.on("activate", () => {

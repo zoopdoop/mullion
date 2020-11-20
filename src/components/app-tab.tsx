@@ -15,7 +15,7 @@ const AppTab: React.FC<Props> = ({ appTab, visible, navigateToUrl }) => {
   return (
     <div className={className}>
       <AppTabToolbar appTab={appTab} navigateToUrl={navigateToUrl} />
-      <AppTabPanes appTab={appTab} navigateToUrl={navigateToUrl} />
+      <AppTabPanes appTab={appTab} navigateToUrl={navigateToUrl} visible={visible} />
     </div>
   )
 }

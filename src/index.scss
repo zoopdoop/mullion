@@ -81,6 +81,7 @@ body {
 
 .pane-navigation {
   padding: 5px;
+  border-bottom: 1px solid #ddd;
 
   input {
     width: 100%;
@@ -97,16 +98,40 @@ body {
 .app-tab-panes {
   height: 100%;
   flex-grow: 1;
-}
-
-.app-tab-pane {
-  height: 100%;
   display: flex;
   justify-content: space-between;
 }
 
 .primary-pane {
   flex-grow: 1;
+}
+
+.internal-pane {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.internal-start-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin: 0 0 15px 0;
+    font-size: 3em;
+  }
+
+  input {
+    width: 40vw;
+    max-width: 500px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    outline: none;
+  }
 }
 
 .splitter {
@@ -136,4 +161,9 @@ body {
 }
 
 .dummy-pane {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }

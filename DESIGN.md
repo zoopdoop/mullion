@@ -19,11 +19,11 @@ React is used for the app for all UI (except for the BrowserViews).  This the he
 ```
 App
   AppTabBar
-  AppTab
-    AppTabToolbar
-      PaneNavigation
-    AppTabPanes
-      AppTabPane
+  AppTabs
+    AppTab+
+      AppTabToolbar
+        PaneNavigation
+      AppTabPanes
         PrimaryPane
           DummyPane
         Splitter

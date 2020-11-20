@@ -1,5 +1,5 @@
 import React from "react"
-import generateClassName from "../utils/generate-classname"
+import generateClassName from "../lib/generate-classname"
 import { IAppTab } from "../models/app-tab"
 
 interface Props {

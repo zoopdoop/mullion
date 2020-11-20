@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { IAppTab, INewAppTab } from "../models/app-tab";
+import { Id } from "../models/generic-types";
 import { useId } from "./use-id";
 
 export const useAppState = () => {
   const [appTabs, _setAppTabs] = useState<IAppTab[]>([])
-  const [selectedAppTab, _selectAppTab] = useState<IAppTab|undefined>(undefined)
+  const [selectedAppTabId, _selectAppTabId] = useState<Id|undefined>(undefined)
   const getNextAppTabId = useId(1)
 
   const addAppTab = (newTab?: INewAppTab) => {
@@ -25,7 +26,7 @@ export const useAppState = () => {
   }
 
   const selectAppTab = (appTab: IAppTab) => {
-    _selectAppTab(appTab)
+    _selectAppTabId(appTab.id)
 
     // TODO: send message to show browser views
   }
@@ -36,7 +37,7 @@ export const useAppState = () => {
       const index = appTabs.indexOf(appTab)
       _setAppTabs(_appTabs => {
         const otherTabs = _appTabs.filter(_appTab => _appTab !== appTab)
-        if (appTab === selectedAppTab) {
+        if (appTab.id === selectedAppTabId) {
           selectAppTab(otherTabs[index] || otherTabs[index - 1])
         }
         return otherTabs
@@ -48,15 +49,25 @@ export const useAppState = () => {
     }
   }
 
+  const navigateToUrl = (appTab: IAppTab, url: string) => {
+    _updateAppTab(appTab, {primaryUrl: url})
+    // TODO: send message to navigate to url
+  }
+
+  const _updateAppTab = (appTab: IAppTab, updates: Partial<IAppTab>) => {
+    _setAppTabs(_appTabs => _appTabs.map(_appTab => _appTab === appTab ? {...appTab, ...updates} : _appTab))
+  }
+
   useEffect(() => {
     selectAppTab(addAppTab())
   }, [])
 
   return {
     appTabs,
+    selectedAppTabId,
     addAppTab,
-    selectedAppTab,
     selectAppTab,
-    closeAppTab
+    closeAppTab,
+    navigateToUrl
   }
 }

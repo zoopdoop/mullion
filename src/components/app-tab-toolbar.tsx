@@ -1,12 +1,15 @@
 import React from "react"
+import { IAppTab } from "../models/app-tab"
 import PaneNavigation from "./pane-navigation"
 
-interface Props {}
+interface Props {
+  appTab: IAppTab
+}
 
-const AppTabToolbar: React.FC<Props> = () => {
+const AppTabToolbar: React.FC<Props> = ({ appTab }) => {
   return (
     <div className="app-tab-toolbar">
-      <PaneNavigation />
+      <PaneNavigation appTab={appTab} />
     </div>
   )
 }

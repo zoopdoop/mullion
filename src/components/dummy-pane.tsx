@@ -4,7 +4,7 @@ interface Props {}
 
 const DummyPane: React.FC<Props> = () => {
   return (
-    <div className="pane-navigation">
+    <div className="dummy-pane">
       Dummy Pane
     </div>
   )

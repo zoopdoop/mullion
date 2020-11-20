@@ -8,7 +8,6 @@
 
 ### Todo
 
-- [ ] Implement partial AppTab (split status, primary url)  
 - [ ] Implement partial DummyPane (show url)  
 - [ ] Implement partial PaneNavigation (url input box and load url)  
 - [ ] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)  
@@ -24,9 +23,11 @@
 
 ### In Progress
 
+- [ ] Implement partial AppTab (split status, primary url)  
 
 ### Done ✓
 
+- [x] Add back AppTabs and use display: none to hide  
 - [x] Implement AppTabs (show selected AppTab)  
 - [x] Implement AppTabBar (add, close)  
 - [x] Setup top level context for state  

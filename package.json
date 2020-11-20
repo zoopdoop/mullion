@@ -13,7 +13,11 @@
   },
   "build": {
     "appId": "com.zoopdoop.mullion",
-    "files": ["src/electron.js", "src/assets/*", "build/**/*"],
+    "files": [
+      "src/electron.js",
+      "src/assets/*",
+      "build/**/*"
+    ],
     "mac": {
       "target": "dmg",
       "icon": "src/assets/logo.png"
@@ -27,7 +31,7 @@
       "icon": "src/assets/logo.png",
       "category": "Development"
     }
-  },  
+  },
   "repository": "https://github.com/zoopdoop/mullion",
   "author": "Doug Martin",
   "license": "MIT",
@@ -47,12 +51,14 @@
     "electron-builder": "^22.9.1",
     "eslint": "^7.3.1",
     "parcel-bundler": "^1.12.4",
+    "sass": "^1.29.0",
     "typescript": "^3.9.7",
     "wait-on": "^5.2.0"
   },
   "dependencies": {
     "electron-is-dev": "^1.2.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "src": "^1.1.2"
   }
 }

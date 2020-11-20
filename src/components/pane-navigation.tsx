@@ -1,11 +1,16 @@
 import React from "react"
+import { IAppTab } from "../models/app-tab"
 
-interface Props {}
+interface Props {
+  appTab: IAppTab
+}
 
-const PaneNavigation: React.FC<Props> = () => {
+const PaneNavigation: React.FC<Props> = ({ appTab }) => {
   return (
     <div className="pane-navigation">
-      Pane Navigation
+      <div>
+        <input type="text" defaultValue={appTab?.primaryUrl} spellCheck={false} />
+      </div>
     </div>
   )
 }

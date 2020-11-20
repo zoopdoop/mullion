@@ -18,7 +18,7 @@ const App: React.FC<Props> = () => {
         selectAppTab={selectAppTab}
         closeAppTab={closeAppTab}
       />
-      <AppTabs />
+      <AppTabs appTabs={appTabs} selectedAppTab={selectedAppTab} />
     </div>
   )
 }

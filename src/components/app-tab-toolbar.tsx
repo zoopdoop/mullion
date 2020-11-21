@@ -5,13 +5,12 @@ import PaneNavigation from "./pane-navigation"
 
 interface Props {
   appTab: IAppTab
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const AppTabToolbar: React.FC<Props> = ({ appTab, navigateToUrl }) => {
+const AppTabToolbar: React.FC<Props> = ({ appTab }) => {
   return (
     <div className="app-tab-toolbar">
-      <PaneNavigation appTab={appTab} navigateToUrl={navigateToUrl} />
+      <PaneNavigation appTab={appTab} />
     </div>
   )
 }

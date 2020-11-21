@@ -7,14 +7,13 @@ import InternalPane from "./internal-pane"
 interface Props {
   appTab: IAppTab
   visible: boolean
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const PrimaryPane: React.FC<Props> = ({appTab, visible, navigateToUrl}) => {
+const PrimaryPane: React.FC<Props> = ({appTab, visible}) => {
   const renderPane = () => {
     const url = appTab.primaryUrl || INTERNAL_START_URL
     if (isInternalUrl(url)) {
-      return <InternalPane appTab={appTab} url={url} navigateToUrl={navigateToUrl} />
+      return <InternalPane appTab={appTab} url={url} />
     }
     return <DummyPane appTab={appTab} url={url} visible={visible} isPrimary={true} />
   }

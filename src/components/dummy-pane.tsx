@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
+import { AppStateStoreContext } from "../hooks/use-app-state"
 import { useClientRect } from "../hooks/use-client-rect"
 import { IAppTab } from "../models/app-tab"
 

@@ -8,15 +8,14 @@ import InternalUnknownPane from "./internal-panes/internal-unknown-pane"
 interface Props {
   appTab: IAppTab
   url: string
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const InternalPane: React.FC<Props> = ({appTab, url, navigateToUrl}) => {
+const InternalPane: React.FC<Props> = ({appTab, url}) => {
 
   const renderInternalPane = () => {
     switch (url) {
       case INTERNAL_START_URL:
-        return <InternalStartPane appTab={appTab} navigateToUrl={navigateToUrl} />
+        return <InternalStartPane appTab={appTab} />
 
       default:
         return <InternalUnknownPane appTab={appTab} url={url} />

@@ -1,19 +1,20 @@
-import React, { useEffect, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
+import { AppStateStoreContext, navigateToUrlAction } from "../../hooks/use-app-state"
 import { generateSearchUrl } from "../../lib/generate-search-url"
 import { IAppTab } from "../../models/app-tab"
 
 interface Props {
   appTab: IAppTab
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const InternalStartPane: React.FC<Props> = ({appTab, navigateToUrl}) => {
+const InternalStartPane: React.FC<Props> = ({appTab}) => {
+  const { dispatch } = useContext(AppStateStoreContext)
   const searchRef = useRef<HTMLInputElement|null>(null)
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        navigateToUrl(appTab, generateSearchUrl("google", searchRef.current?.value))
+        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", searchRef.current?.value)))
         break;
 
       case "Escape":

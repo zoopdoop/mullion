@@ -7,15 +7,14 @@ import generateClassName from "../lib/generate-classname"
 interface Props {
   appTab: IAppTab
   visible: boolean
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const AppTab: React.FC<Props> = ({ appTab, visible, navigateToUrl }) => {
+const AppTab: React.FC<Props> = ({ appTab, visible }) => {
   const className = generateClassName("app-tab", {hidden: !visible})
   return (
     <div className={className}>
-      <AppTabToolbar appTab={appTab} navigateToUrl={navigateToUrl} />
-      <AppTabPanes appTab={appTab} navigateToUrl={navigateToUrl} visible={visible} />
+      <AppTabToolbar appTab={appTab} />
+      <AppTabPanes appTab={appTab} visible={visible} />
     </div>
   )
 }

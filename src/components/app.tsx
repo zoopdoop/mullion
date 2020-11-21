@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import AppTabBar from "./app-tab-bar"
 import AppTabs from "./app-tabs"
 
-import { useAppState } from "../hooks/use-app-state";
+import { useAppStateStore, AppStateStoreContext, addAndSelectAppTabAction } from "../hooks/use-app-state";
 import { useElectronContextBridge } from "../hooks/use-electron-context-bridge";
 
 interface Props {}
 
 const App: React.FC<Props> = () => {
-  const {appTabs, addAppTab, selectedAppTabId, selectAppTab, closeAppTab, navigateToUrl} = useAppState();
   const electronContextBridge = useElectronContextBridge()
+  const appStateStore = useAppStateStore()
+  const {state: {appTabs, selectedAppTabId}, dispatch} = appStateStore
 
   useEffect(() => {
     if (electronContextBridge) {
       electronContextBridge.onMainProcessMessage((message: string) => {
         switch (message) {
           case "add-new-tab":
-            selectAppTab(addAppTab())
+            dispatch(addAndSelectAppTabAction())
             break
         }
       })
@@ -24,20 +25,18 @@ const App: React.FC<Props> = () => {
   }, [electronContextBridge])
 
   return (
-    <div className="app">
-      <AppTabBar
-        tabs={appTabs}
-        selectedAppTabId={selectedAppTabId}
-        addAppTab={addAppTab} 
-        selectAppTab={selectAppTab}
-        closeAppTab={closeAppTab}
-      />
-      <AppTabs
-        appTabs={appTabs}
-        selectedAppTabId={selectedAppTabId}
-        navigateToUrl={navigateToUrl} 
-      />
-    </div>
+    <AppStateStoreContext.Provider value={appStateStore}>
+      <div className="app">
+        <AppTabBar
+          tabs={appTabs}
+          selectedAppTabId={selectedAppTabId}
+        />
+        <AppTabs
+          appTabs={appTabs}
+          selectedAppTabId={selectedAppTabId}
+        />
+      </div>
+    </AppStateStoreContext.Provider>
   )
 }
 

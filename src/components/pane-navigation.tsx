@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
+import { AppStateStoreContext, navigateToUrlAction } from "../hooks/use-app-state"
 import { generateSearchUrl } from "../lib/generate-search-url"
 import { IAppTab } from "../models/app-tab"
 
 interface Props {
   appTab: IAppTab
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const PaneNavigation: React.FC<Props> = ({ appTab, navigateToUrl }) => {
+const PaneNavigation: React.FC<Props> = ({ appTab }) => {
+  const { dispatch } = useContext(AppStateStoreContext)
   const [inputValue, setInputValue] = useState(appTab.primaryUrl || "")
   const inputRef = useRef<HTMLInputElement|null>(null)
 
@@ -15,7 +16,7 @@ const PaneNavigation: React.FC<Props> = ({ appTab, navigateToUrl }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        navigateToUrl(appTab, generateSearchUrl("google", inputValue.trim()))
+        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", inputValue.trim())))
         break;
       case 'Escape':
         setInputValue(appTab.primaryUrl || "")

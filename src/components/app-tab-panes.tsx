@@ -7,10 +7,9 @@ import { IAppTab } from "../models/app-tab"
 interface Props {
   appTab: IAppTab
   visible: boolean
-  navigateToUrl: (appTab: IAppTab, url: string) => void
 }
 
-const AppTabPanes: React.FC<Props> = ({ appTab, visible, navigateToUrl }) => {
+const AppTabPanes: React.FC<Props> = ({ appTab, visible }) => {
 
   useEffect(() => {
     if (visible && (appTab.secondaryUrls.length === 0)) {
@@ -21,12 +20,12 @@ const AppTabPanes: React.FC<Props> = ({ appTab, visible, navigateToUrl }) => {
 
   const renderPanes = () => {
     if (appTab.secondaryUrls.length === 0) {
-      return <PrimaryPane appTab={appTab} visible={visible} navigateToUrl={navigateToUrl} />
+      return <PrimaryPane appTab={appTab} visible={visible} />
     }
 
     return (
       <>
-        <PrimaryPane appTab={appTab} visible={visible} navigateToUrl={navigateToUrl} />
+        <PrimaryPane appTab={appTab} visible={visible} />
         <Splitter />
         <SecondaryPane />
       </>

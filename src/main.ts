@@ -1,5 +1,8 @@
 import { app, BrowserWindow, globalShortcut, BrowserView } from "electron";
 import * as path from "path";
+import { ActionFromMainProcessMessage } from "./lib/electron-context-bridge";
+import { IRendererAction } from "./actions/renderer-actions";
+import { addAndSelectAppTabAction, addAppTabAction } from "./actions/tab-actions"
 
 const isDev = require("electron-is-dev")
 
@@ -16,8 +19,6 @@ function createWindow() {
     // autoHideMenuBar: true
   });
   // mainWindow.setMenu(null)
-
-  mainWindow.webContents.openDevTools()
 
   /*
   // proof of concept with two pane Google search
@@ -62,8 +63,8 @@ function createWindow() {
   mainWindow.on("resize", () => layout())
   */
 
-  const sendMainProcessMessage = (message: string, ...args: any[]) => {
-    mainWindow.webContents.send("main-process-message", message, ...args)
+  const sendActionToRenderer = (action: IRendererAction) => {
+    mainWindow.webContents.send(ActionFromMainProcessMessage, action)
   }
 
   mainWindow.webContents.on("before-input-event", (e, input) => {
@@ -71,8 +72,7 @@ function createWindow() {
       const key = input.key.toLowerCase()
       switch (key) {
         case "n":
-          sendMainProcessMessage("add-new-tab")
-          // mainWindow.webContents.send("add-new-tab")
+          sendActionToRenderer(addAndSelectAppTabAction())
           break;
         default:
           return

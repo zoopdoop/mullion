@@ -1,7 +1,7 @@
 import produce, { Draft } from "immer"
 
 import { createContext } from "react";
-import { ITabsAction } from "./tabs-actions";
+import { IRendererAction } from "../actions/renderer-actions";
 import { DefaultTabsState, ITabsState, tabsReducer } from "./tabs-store";
 
 export interface IRootState {
@@ -10,14 +10,14 @@ export interface IRootState {
 
 export interface IRootStore {
   state: IRootState
-  dispatch: React.Dispatch<ITabsAction>
+  dispatch: React.Dispatch<IRendererAction>
 }
 
 export const DefaultRootState: IRootState = {
   tabs: DefaultTabsState
 }
 
-export const rootReducer = produce((draft: Draft<IRootState>, action: ITabsAction) => {
+export const rootReducer = produce((draft: Draft<IRootState>, action: IRendererAction) => {
   draft.tabs = tabsReducer(draft.tabs, action)
   return draft
 })

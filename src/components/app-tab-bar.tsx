@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
-import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../stores/tabs-actions"
-import { IAppTab } from "../stores/tabs-models"
+import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../actions/tab-actions"
+import { IAppTab } from "../stores/tab-models"
 import { Id } from "../stores/generic-types"
 import { RootStoreContext } from "../stores/root-store"
 import AppTabBarTab from "./app-tab-bar-tab"

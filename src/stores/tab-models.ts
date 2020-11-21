@@ -17,6 +17,3 @@ export interface ISecondaryTab {
   title: string | null
   url: Url
 }
-
-export type INewAppTab = Partial<Pick<IAppTab, "title" | "url" | "secondaryTabs">>
-export type INewSecondaryTab = Partial<Pick<ISecondaryTab, "title" | "url">>

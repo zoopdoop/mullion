@@ -1,5 +1,5 @@
 import React from "react"
-import { IAppTab } from "../stores/tabs-models"
+import { IAppTab } from "../stores/tab-models"
 import { Id } from "../stores/generic-types"
 import AppTab from "./app-tab"
 

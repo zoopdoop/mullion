@@ -3,28 +3,21 @@ import AppTabBar from "./app-tab-bar"
 import AppTabs from "./app-tabs"
 
 import { useRootStore } from "../hooks/use-root-store";
-import { useElectronContextBridge } from "../hooks/use-electron-context-bridge";
 import { RootStoreContext } from "../stores/root-store";
-import { addAndSelectAppTabAction } from "../stores/tabs-actions";
+import { useElectronContextBridgeRef } from "../hooks/use-electron-context-bridge-ref";
 
 interface Props {}
 
 const App: React.FC<Props> = () => {
-  const electronContextBridge = useElectronContextBridge()
   const rootStore = useRootStore()
   const {state: {tabs: {appTabs, selectedAppTabId}}, dispatch} = rootStore
+  const electronContextBridgeRef = useElectronContextBridgeRef()
 
   useEffect(() => {
-    if (electronContextBridge) {
-      electronContextBridge.onMainProcessMessage((message: string) => {
-        switch (message) {
-          case "add-new-tab":
-            dispatch(addAndSelectAppTabAction())
-            break
-        }
-      })
+    if (electronContextBridgeRef.current) {
+      electronContextBridgeRef.current.onActionFromMainProcess(dispatch)
     }
-  }, [electronContextBridge])
+  }, [electronContextBridgeRef.current])
 
   return (
     <RootStoreContext.Provider value={rootStore}>

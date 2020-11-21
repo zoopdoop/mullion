@@ -2,8 +2,8 @@ import produce, { Draft } from "immer"
 import { WritableDraft } from "immer/dist/internal";
 
 import { Id } from "./generic-types";
-import { ITabsAction } from "./tabs-actions";
-import { IAppTab, INewAppTab, INewSecondaryTab, ISecondaryTab } from "./tabs-models";
+import { INewAppTab, INewSecondaryTab, ITabAction } from "../actions/tab-actions";
+import { IAppTab, ISecondaryTab } from "./tab-models";
 
 export interface ITabsState {
   appTabs: IAppTab[]
@@ -13,7 +13,7 @@ export interface ITabsState {
 
 export interface ITabsStateStore {
   state: ITabsState
-  dispatch: React.Dispatch<ITabsAction>
+  dispatch: React.Dispatch<ITabAction>
 }
 
 const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
@@ -43,7 +43,7 @@ export const DefaultTabsState: ITabsState = {
   selectedAppTabId: 1,
 }
 
-export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabsAction) => {
+export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction) => {
   const getAppTabIndex = (appTabId: Id) => draft.appTabs.findIndex(appTab => appTab.id === appTabId)
   const updateAppTab = (appTabId: Id, updater: (appTab: WritableDraft<IAppTab>) => void) => {
     const index = getAppTabIndex(appTabId)

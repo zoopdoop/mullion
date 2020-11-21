@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react"
-import { addAndSelectSecondaryTabAction } from "../stores/tabs-actions"
+import { addAndSelectSecondaryTabAction } from "../actions/tab-actions"
 import { useClientRect } from "../hooks/use-client-rect"
-import { IAppTab } from "../stores/tabs-models"
+import { IAppTab } from "../stores/tab-models"
 import { RootStoreContext } from "../stores/root-store"
 
 interface Props {

@@ -1,13 +1,11 @@
 import { contextBridge, ipcRenderer } from "electron"
-import { IElectronContextBridge } from "./lib/electron-context-bridge"
+import { ActionFromMainProcessMessage, IElectronContextBridge } from "./lib/electron-context-bridge"
+import { IRendererAction } from "./actions/renderer-actions"
 
 const electronContextBridge: IElectronContextBridge = {
-  onMainProcessMessage: (callback: (...args: any[]) => void) => {
-    ipcRenderer.on("main-process-message", (e, args) => callback(args))
-  },
-  // ipcRenderer: {
-  //   on: (message: string, callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => ipcRenderer.on(message, callback)
-  // }
+  onActionFromMainProcess: (callback: (action: IRendererAction) => void) => {
+    ipcRenderer.on(ActionFromMainProcessMessage, (e, action) => callback(action))
+  }
 }
 
 contextBridge.exposeInMainWorld("electron", electronContextBridge)

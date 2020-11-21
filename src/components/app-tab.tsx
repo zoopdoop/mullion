@@ -1,7 +1,7 @@
 import React from "react"
 import AppTabToolbar from "./app-tab-toolbar"
 import AppTabPanes from "./app-tab-panes"
-import { IAppTab } from "../models/app-tab"
+import { IAppTab } from "../stores/app-state-models"
 import generateClassName from "../lib/generate-classname"
 
 interface Props {

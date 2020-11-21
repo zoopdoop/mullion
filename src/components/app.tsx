@@ -1,9 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react"
+import React, { useEffect } from "react"
 import AppTabBar from "./app-tab-bar"
 import AppTabs from "./app-tabs"
 
-import { useAppStateStore, AppStateStoreContext, addAndSelectAppTabAction } from "../hooks/use-app-state";
+import { useAppStateStore } from "../hooks/use-app-state";
 import { useElectronContextBridge } from "../hooks/use-electron-context-bridge";
+import { AppStateStoreContext } from "../stores/app-state-store";
+import { addAndSelectAppTabAction } from "../stores/app-state-actions";
 
 interface Props {}
 

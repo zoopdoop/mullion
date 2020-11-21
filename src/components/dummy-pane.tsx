@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react"
-import { addAndSelectSecondaryTabAction, AppStateStoreContext } from "../hooks/use-app-state"
+import { addAndSelectSecondaryTabAction } from "../stores/app-state-actions"
 import { useClientRect } from "../hooks/use-client-rect"
-import { IAppTab } from "../models/app-tab"
+import { IAppTab } from "../stores/app-state-models"
+import { AppStateStoreContext } from "../stores/app-state-store"
 
 interface Props {
   appTab: IAppTab

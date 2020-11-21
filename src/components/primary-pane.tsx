@@ -1,6 +1,6 @@
 import React from "react"
 import { INTERNAL_START_URL, isInternalUrl } from "../lib/internal-urls"
-import { IAppTab } from "../models/app-tab"
+import { IAppTab } from "../stores/app-state-models"
 import DummyPane from "./dummy-pane"
 import InternalPane from "./internal-pane"
 

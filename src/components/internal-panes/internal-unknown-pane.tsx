@@ -1,5 +1,5 @@
 import React from "react"
-import { IAppTab } from "../../models/app-tab"
+import { IAppTab } from "../../stores/app-state-models"
 
 interface Props {
   appTab: IAppTab

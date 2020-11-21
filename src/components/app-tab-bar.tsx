@@ -1,7 +1,8 @@
 import React, { useContext } from "react"
-import { addAndSelectAppTabAction, AppStateStoreContext, closeAppTabAction, selectAppTabAction } from "../hooks/use-app-state"
-import { IAppTab } from "../models/app-tab"
-import { Id } from "../models/generic-types"
+import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../stores/app-state-actions"
+import { IAppTab } from "../stores/app-state-models"
+import { Id } from "../stores/generic-types"
+import { AppStateStoreContext } from "../stores/app-state-store"
 import AppTabBarTab from "./app-tab-bar-tab"
 
 interface Props {

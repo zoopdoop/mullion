@@ -1,6 +1,6 @@
 import React from "react"
-import { IAppTab } from "../models/app-tab"
-import { Id } from "../models/generic-types"
+import { IAppTab } from "../stores/app-state-models"
+import { Id } from "../stores/generic-types"
 import AppTab from "./app-tab"
 
 interface Props {

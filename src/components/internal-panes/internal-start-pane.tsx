@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react"
-import { AppStateStoreContext, navigateToUrlAction } from "../../hooks/use-app-state"
+import { navigateToUrlAction } from "../../stores/app-state-actions"
 import { generateSearchUrl } from "../../lib/generate-search-url"
-import { IAppTab } from "../../models/app-tab"
+import { IAppTab } from "../../stores/app-state-models"
+import { AppStateStoreContext } from "../../stores/app-state-store"
 
 interface Props {
   appTab: IAppTab

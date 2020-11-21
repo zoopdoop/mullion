@@ -1,5 +1,4 @@
 import { Id, Url } from "./generic-types"
-import { ISecondaryTab } from "./secondary-tab"
 
 export interface IAppTab {
   id: Id
@@ -13,4 +12,11 @@ export interface IAppTab {
   }
 }
 
+export interface ISecondaryTab {
+  id: Id
+  title: string | null
+  url: Url
+}
+
 export type INewAppTab = Partial<Pick<IAppTab, "title" | "url" | "secondaryTabs">>
+export type INewSecondaryTab = Partial<Pick<ISecondaryTab, "title" | "url">>

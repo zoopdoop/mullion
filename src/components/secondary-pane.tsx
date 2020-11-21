@@ -1,6 +1,6 @@
-import React from "react"
-import SecondaryPaneTabBar from "./secondary-pane-tab-bar.tsx"
-import SecondaryPaneTabs from "./secondary-pane-tabs"
+import React from "react";
+import SecondaryPaneTabBar from "./secondary-pane-tab-bar.tsx";
+import SecondaryPaneTabs from "./secondary-pane-tabs";
 
 interface Props {}
 
@@ -10,7 +10,7 @@ const SecondaryPane: React.FC<Props> = () => {
       <SecondaryPaneTabBar />
       <SecondaryPaneTabs />
     </div>
-  )
-}
+  );
+};
 
-export default SecondaryPane
+export default SecondaryPane;

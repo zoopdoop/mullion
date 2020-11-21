@@ -3,7 +3,8 @@ $app-tab-height: 30px;
 $splitter-width: 5px;
 $splitter-color: #777;
 
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
 }
@@ -48,7 +49,7 @@ body {
 
   &.selected {
     background-color: #fff;
-    border-bottom: 1px solid #FFF;
+    border-bottom: 1px solid #fff;
   }
 
   .close {

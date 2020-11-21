@@ -1,13 +1,9 @@
-import React from "react"
+import React from "react";
 
 interface Props {}
 
 const SecondaryPaneInfo: React.FC<Props> = () => {
-  return (
-    <div className="secondary-pane-info">
-      Secondary Pane Info
-    </div>
-  )
-}
+  return <div className="secondary-pane-info">Secondary Pane Info</div>;
+};
 
-export default SecondaryPaneInfo
+export default SecondaryPaneInfo;

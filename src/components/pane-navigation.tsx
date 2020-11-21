@@ -1,33 +1,39 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { navigateToUrlAction } from "../actions/tab-actions"
-import { generateSearchUrl } from "../lib/generate-search-url"
-import { IAppTab } from "../stores/tab-models"
-import { RootStoreContext } from "../stores/root-store"
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { navigateToUrlAction } from "../actions/tab-actions";
+import { generateSearchUrl } from "../lib/generate-search-url";
+import { IAppTab } from "../stores/tab-models";
+import { RootStoreContext } from "../stores/root-store";
 
 interface Props {
-  appTab: IAppTab
+  appTab: IAppTab;
 }
 
 const PaneNavigation: React.FC<Props> = ({ appTab }) => {
-  const { dispatch } = useContext(RootStoreContext)
-  const [inputValue, setInputValue] = useState(appTab.url || "")
-  const inputRef = useRef<HTMLInputElement|null>(null)
+  const { dispatch } = useContext(RootStoreContext);
+  const [inputValue, setInputValue] = useState(appTab.url || "");
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(e.target.value);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", inputValue.trim())))
+        dispatch(
+          navigateToUrlAction(
+            appTab,
+            generateSearchUrl("google", inputValue.trim())
+          )
+        );
         break;
-      case 'Escape':
-        setInputValue(appTab.url || "")
+      case "Escape":
+        setInputValue(appTab.url || "");
         break;
     }
-  }
+  };
 
   useEffect(() => {
-    setInputValue(appTab.url || "")
-  }, [appTab.url])
+    setInputValue(appTab.url || "");
+  }, [appTab.url]);
 
   return (
     <div className="pane-navigation">
@@ -38,11 +44,11 @@ const PaneNavigation: React.FC<Props> = ({ appTab }) => {
           spellCheck={false}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          ref={inputRef} 
+          ref={inputRef}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaneNavigation
+export default PaneNavigation;

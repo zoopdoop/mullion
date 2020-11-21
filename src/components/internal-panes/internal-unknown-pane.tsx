@@ -1,18 +1,15 @@
-import React from "react"
-import { IAppTab } from "../../stores/tab-models"
+import React from "react";
+import { IAppTab } from "../../stores/tab-models";
 
 interface Props {
-  appTab: IAppTab
-  url: string
+  appTab: IAppTab;
+  url: string;
 }
 
-const InternalUnknownPane: React.FC<Props> = ({appTab, url}) => {
-
+const InternalUnknownPane: React.FC<Props> = ({ appTab, url }) => {
   return (
-    <div className="internal-unknown-pane">
-      Unknown internal url: {url}
-    </div>
-  )
-}
+    <div className="internal-unknown-pane">Unknown internal url: {url}</div>
+  );
+};
 
-export default InternalUnknownPane
+export default InternalUnknownPane;

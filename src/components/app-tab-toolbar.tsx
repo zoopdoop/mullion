@@ -1,10 +1,10 @@
-import { app } from "electron"
-import React from "react"
-import { IAppTab } from "../stores/tab-models"
-import PaneNavigation from "./pane-navigation"
+import { app } from "electron";
+import React from "react";
+import { IAppTab } from "../stores/tab-models";
+import PaneNavigation from "./pane-navigation";
 
 interface Props {
-  appTab: IAppTab
+  appTab: IAppTab;
 }
 
 const AppTabToolbar: React.FC<Props> = ({ appTab }) => {
@@ -12,7 +12,7 @@ const AppTabToolbar: React.FC<Props> = ({ appTab }) => {
     <div className="app-tab-toolbar">
       <PaneNavigation appTab={appTab} />
     </div>
-  )
-}
+  );
+};
 
-export default AppTabToolbar
+export default AppTabToolbar;

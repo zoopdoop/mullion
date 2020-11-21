@@ -2,9 +2,12 @@ import { app, BrowserWindow, globalShortcut, BrowserView } from "electron";
 import * as path from "path";
 import { ActionFromMainProcessMessage } from "./lib/electron-context-bridge";
 import { IRendererAction } from "./actions/renderer-actions";
-import { addAndSelectAppTabAction, addAppTabAction } from "./actions/tab-actions"
+import {
+  addAndSelectAppTabAction,
+  addAppTabAction,
+} from "./actions/tab-actions";
 
-const isDev = require("electron-is-dev")
+const isDev = require("electron-is-dev");
 
 function createWindow() {
   // Create the browser window.
@@ -13,7 +16,7 @@ function createWindow() {
     webPreferences: {
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
-      preload: path.join(app.getAppPath(), 'preload.js')
+      preload: path.join(app.getAppPath(), "preload.js"),
     },
     width: 800,
     // autoHideMenuBar: true
@@ -64,22 +67,22 @@ function createWindow() {
   */
 
   const sendActionToRenderer = (action: IRendererAction) => {
-    mainWindow.webContents.send(ActionFromMainProcessMessage, action)
-  }
+    mainWindow.webContents.send(ActionFromMainProcessMessage, action);
+  };
 
   mainWindow.webContents.on("before-input-event", (e, input) => {
     if (input.control) {
-      const key = input.key.toLowerCase()
+      const key = input.key.toLowerCase();
       switch (key) {
         case "n":
-          sendActionToRenderer(addAndSelectAppTabAction())
+          sendActionToRenderer(addAndSelectAppTabAction());
           break;
         default:
-          return
+          return;
       }
-      e.preventDefault()
+      e.preventDefault();
     }
-  })
+  });
 
   mainWindow.loadURL(
     isDev

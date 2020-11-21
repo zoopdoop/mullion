@@ -1,3 +1,3 @@
 import { ITabAction } from "./tab-actions";
 
-export type IRendererAction = ITabAction
+export type IRendererAction = ITabAction;

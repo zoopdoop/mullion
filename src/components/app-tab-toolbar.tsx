@@ -1,6 +1,6 @@
 import { app } from "electron"
 import React from "react"
-import { IAppTab } from "../stores/app-state-models"
+import { IAppTab } from "../stores/tabs-models"
 import PaneNavigation from "./pane-navigation"
 
 interface Props {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef } from "react"
-import { addAndSelectSecondaryTabAction } from "../stores/app-state-actions"
+import { addAndSelectSecondaryTabAction } from "../stores/tabs-actions"
 import { useClientRect } from "../hooks/use-client-rect"
-import { IAppTab } from "../stores/app-state-models"
-import { AppStateStoreContext } from "../stores/app-state-store"
+import { IAppTab } from "../stores/tabs-models"
+import { RootStoreContext } from "../stores/root-store"
 
 interface Props {
   appTab: IAppTab
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const DummyPane: React.FC<Props> = ({ appTab, url, visible, isPrimary }) => {
-  const { dispatch } = useContext(AppStateStoreContext)
+  const { dispatch } = useContext(RootStoreContext)
   const containerRef = useRef<HTMLDivElement|null>(null)
   const clientRect = useClientRect(containerRef)
 

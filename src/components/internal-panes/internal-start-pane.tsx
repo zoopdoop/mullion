@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useRef } from "react"
-import { navigateToUrlAction } from "../../stores/app-state-actions"
+import { navigateToUrlAction } from "../../stores/tabs-actions"
 import { generateSearchUrl } from "../../lib/generate-search-url"
-import { IAppTab } from "../../stores/app-state-models"
-import { AppStateStoreContext } from "../../stores/app-state-store"
+import { IAppTab } from "../../stores/tabs-models"
+import { RootStoreContext } from "../../stores/root-store"
 
 interface Props {
   appTab: IAppTab
 }
 
 const InternalStartPane: React.FC<Props> = ({appTab}) => {
-  const { dispatch } = useContext(AppStateStoreContext)
+  const { dispatch } = useContext(RootStoreContext)
   const searchRef = useRef<HTMLInputElement|null>(null)
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

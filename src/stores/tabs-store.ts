@@ -1,20 +1,19 @@
 import produce, { Draft } from "immer"
-
-import { createContext } from "react";
-import { Id } from "./generic-types";
 import { WritableDraft } from "immer/dist/internal";
-import { IAction } from "./app-state-actions";
-import { IAppTab, INewAppTab, INewSecondaryTab, ISecondaryTab } from "./app-state-models";
 
-export interface IAppState {
+import { Id } from "./generic-types";
+import { ITabsAction } from "./tabs-actions";
+import { IAppTab, INewAppTab, INewSecondaryTab, ISecondaryTab } from "./tabs-models";
+
+export interface ITabsState {
   appTabs: IAppTab[]
   nextTabId: Id
   selectedAppTabId: Id
 }
 
-export interface IAppStateStore {
-  appState: IAppState
-  dispatch: React.Dispatch<IAction>
+export interface ITabsStateStore {
+  state: ITabsState
+  dispatch: React.Dispatch<ITabsAction>
 }
 
 const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
@@ -38,13 +37,13 @@ const createSecondaryTab = (id: Id, newSecondaryTab?: INewSecondaryTab): ISecond
   }
 }
 
-export const defaultAppState: IAppState = {
+export const DefaultTabsState: ITabsState = {
   appTabs: [createAppTab(1)],
   nextTabId: 2,
   selectedAppTabId: 1,
 }
 
-export const appStateReducer = produce((draft: Draft<IAppState>, action: IAction) => {
+export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabsAction) => {
   const getAppTabIndex = (appTabId: Id) => draft.appTabs.findIndex(appTab => appTab.id === appTabId)
   const updateAppTab = (appTabId: Id, updater: (appTab: WritableDraft<IAppTab>) => void) => {
     const index = getAppTabIndex(appTabId)
@@ -92,7 +91,7 @@ export const appStateReducer = produce((draft: Draft<IAppState>, action: IAction
         }
         // TODO: send message to delete browser views
       } else {
-        // TODO: close message window
+        // TODO: send message to close window
       }      
       break
 
@@ -104,5 +103,3 @@ export const appStateReducer = produce((draft: Draft<IAppState>, action: IAction
 
   return draft
 })
-
-export const AppStateStoreContext = createContext<IAppStateStore>({appState: defaultAppState, dispatch: () => {}})

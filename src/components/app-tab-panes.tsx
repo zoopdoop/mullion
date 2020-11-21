@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import PrimaryPane from "./primary-pane"
 import Splitter from "./splitter"
 import SecondaryPane from "./secondary-pane"
-import { IAppTab } from "../stores/app-state-models"
+import { IAppTab } from "../stores/tabs-models"
 
 interface Props {
   appTab: IAppTab

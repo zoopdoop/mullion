@@ -2,17 +2,17 @@ import React, { useEffect } from "react"
 import AppTabBar from "./app-tab-bar"
 import AppTabs from "./app-tabs"
 
-import { useAppStateStore } from "../hooks/use-app-state";
+import { useRootStore } from "../hooks/use-root-store";
 import { useElectronContextBridge } from "../hooks/use-electron-context-bridge";
-import { AppStateStoreContext } from "../stores/app-state-store";
-import { addAndSelectAppTabAction } from "../stores/app-state-actions";
+import { RootStoreContext } from "../stores/root-store";
+import { addAndSelectAppTabAction } from "../stores/tabs-actions";
 
 interface Props {}
 
 const App: React.FC<Props> = () => {
   const electronContextBridge = useElectronContextBridge()
-  const appStateStore = useAppStateStore()
-  const {appState: {appTabs, selectedAppTabId}, dispatch} = appStateStore
+  const rootStore = useRootStore()
+  const {state: {tabs: {appTabs, selectedAppTabId}}, dispatch} = rootStore
 
   useEffect(() => {
     if (electronContextBridge) {
@@ -27,7 +27,7 @@ const App: React.FC<Props> = () => {
   }, [electronContextBridge])
 
   return (
-    <AppStateStoreContext.Provider value={appStateStore}>
+    <RootStoreContext.Provider value={rootStore}>
       <div className="app">
         <AppTabBar
           tabs={appTabs}
@@ -38,7 +38,7 @@ const App: React.FC<Props> = () => {
           selectedAppTabId={selectedAppTabId}
         />
       </div>
-    </AppStateStoreContext.Provider>
+    </RootStoreContext.Provider>
   )
 }
 

@@ -1,8 +1,8 @@
 import React, { useContext } from "react"
-import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../stores/app-state-actions"
-import { IAppTab } from "../stores/app-state-models"
+import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../stores/tabs-actions"
+import { IAppTab } from "../stores/tabs-models"
 import { Id } from "../stores/generic-types"
-import { AppStateStoreContext } from "../stores/app-state-store"
+import { RootStoreContext } from "../stores/root-store"
 import AppTabBarTab from "./app-tab-bar-tab"
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const AppTabBar: React.FC<Props> = ({ tabs, selectedAppTabId }) => {
-  const { dispatch } = useContext(AppStateStoreContext)
+  const { dispatch } = useContext(RootStoreContext)
 
   const addTab = () => dispatch(addAndSelectAppTabAction())
   const selectAppTab = (appTab: IAppTab) => dispatch(selectAppTabAction(appTab))

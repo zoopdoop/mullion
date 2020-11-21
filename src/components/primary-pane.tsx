@@ -15,9 +15,7 @@ const PrimaryPane: React.FC<Props> = ({ appTab, visible }) => {
     if (isInternalUrl(url)) {
       return <InternalPane appTab={appTab} url={url} />;
     }
-    return (
-      <DummyPane appTab={appTab} url={url} visible={visible} isPrimary={true} />
-    );
+    return <DummyPane appTab={appTab} url={url} visible={visible} isPrimary={true} />;
   };
 
   return <div className="primary-pane">{renderPane()}</div>;

@@ -3,7 +3,7 @@ export type SearchEngine = "google";
 const httpRegex = /^https?:\/\//i;
 const isDomainish = /[^.]\.[^.]{2,}/;
 
-export const generateSearchUrl = (engine: SearchEngine, query?: string) => {
+export const generateSearchUrl = (engine: SearchEngine, query?: string): string => {
   query = (query || "").trim();
 
   if (httpRegex.test(query)) {

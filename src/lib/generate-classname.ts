@@ -1,9 +1,6 @@
-const generateClassName = (
-  unconditional: string,
-  conditional: Record<string, boolean>
-) => {
+const generateClassName = (unconditional: string, conditional: Record<string, boolean>): string => {
   const classNames = [unconditional];
-  Object.keys(conditional).forEach((key) => {
+  Object.keys(conditional).forEach(key => {
     if (conditional[key]) {
       classNames.push(key);
     }

@@ -15,12 +15,7 @@ const InternalStartPane: React.FC<Props> = ({ appTab }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        dispatch(
-          navigateToUrlAction(
-            appTab,
-            generateSearchUrl("google", searchRef.current?.value)
-          )
-        );
+        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", searchRef.current?.value)));
         break;
 
       case "Escape":
@@ -35,7 +30,7 @@ const InternalStartPane: React.FC<Props> = ({ appTab }) => {
     if (searchRef.current) {
       searchRef.current.focus();
     }
-  }, [searchRef.current]);
+  }, [searchRef]);
 
   return (
     <div className="internal-start-pane">

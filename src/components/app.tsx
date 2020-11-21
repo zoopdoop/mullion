@@ -22,7 +22,7 @@ const App: React.FC<Props> = () => {
     if (electronContextBridgeRef.current) {
       electronContextBridgeRef.current.onActionFromMainProcess(dispatch);
     }
-  }, [electronContextBridgeRef.current]);
+  }, [electronContextBridgeRef, dispatch]);
 
   return (
     <RootStoreContext.Provider value={rootStore}>

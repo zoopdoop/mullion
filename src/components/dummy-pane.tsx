@@ -16,10 +16,7 @@ const DummyPane: React.FC<Props> = ({ appTab, url, visible, isPrimary }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const clientRect = useClientRect(containerRef);
 
-  const handleOnClick = () =>
-    dispatch(
-      addAndSelectSecondaryTabAction(appTab, { url: "http://example.com" })
-    );
+  const handleOnClick = () => dispatch(addAndSelectSecondaryTabAction(appTab, { url: "http://example.com" }));
 
   useEffect(() => {
     if (visible) {
@@ -28,7 +25,14 @@ const DummyPane: React.FC<Props> = ({ appTab, url, visible, isPrimary }) => {
   }, [visible, clientRect]);
 
   return (
-    <div className="dummy-pane" ref={containerRef} onClick={handleOnClick}>
+    <div
+      className="dummy-pane"
+      ref={containerRef}
+      role="button"
+      tabIndex={0}
+      onClick={handleOnClick}
+      onKeyDown={handleOnClick}
+    >
       {url}
     </div>
   );

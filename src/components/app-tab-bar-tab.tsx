@@ -9,22 +9,29 @@ interface Props {
   closeAppTab: (appTab: IAppTab) => void;
 }
 
-const AppTabBarTab: React.FC<Props> = ({
-  appTab,
-  selected,
-  selectAppTab,
-  closeAppTab,
-}) => {
+const AppTabBarTab: React.FC<Props> = ({ appTab, selected, selectAppTab, closeAppTab }) => {
   const selectTab = () => selectAppTab(appTab);
   const closeTab = (e: React.MouseEvent<HTMLSpanElement>) => {
     closeAppTab(appTab);
     e.stopPropagation();
   };
+  const handleKeyDownSelectTab = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      selectTab();
+    }
+  };
+  const handleKeyDownCloseTab = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    if (e.key === "Enter") {
+      closeAppTab(appTab);
+      e.stopPropagation();
+    }
+  };
+
   const className = generateClassName("app-tab-bar-tab", { selected });
   return (
-    <div className={className} tabIndex={0} onClick={selectTab} role="button">
+    <div className={className} role="button" tabIndex={0} onClick={selectTab} onKeyDown={handleKeyDownSelectTab}>
       {appTab.title}
-      <span className="close" onClick={closeTab}>
+      <span className="close" role="button" tabIndex={0} onClick={closeTab} onKeyDown={handleKeyDownCloseTab}>
         ×
       </span>
     </div>

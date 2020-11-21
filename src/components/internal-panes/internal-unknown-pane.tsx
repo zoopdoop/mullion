@@ -7,9 +7,7 @@ interface Props {
 }
 
 const InternalUnknownPane: React.FC<Props> = ({ appTab, url }) => {
-  return (
-    <div className="internal-unknown-pane">Unknown internal url: {url}</div>
-  );
+  return <div className="internal-unknown-pane">Unknown internal url: {url}</div>;
 };
 
 export default InternalUnknownPane;

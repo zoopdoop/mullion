@@ -11,12 +11,8 @@ interface Props {
 const AppTabs: React.FC<Props> = ({ appTabs, selectedAppTabId }) => {
   return (
     <div className="app-tabs">
-      {appTabs.map((appTab) => (
-        <AppTab
-          key={appTab.id}
-          appTab={appTab}
-          visible={appTab.id === selectedAppTabId}
-        />
+      {appTabs.map(appTab => (
+        <AppTab key={appTab.id} appTab={appTab} visible={appTab.id === selectedAppTabId} />
       ))}
     </div>
   );

@@ -17,14 +17,12 @@ export const DefaultRootState: IRootState = {
   tabs: DefaultTabsState,
 };
 
-export const rootReducer = produce(
-  (draft: Draft<IRootState>, action: IRendererAction) => {
-    draft.tabs = tabsReducer(draft.tabs, action);
-    return draft;
-  }
-);
+export const rootReducer = produce((draft: Draft<IRootState>, action: IRendererAction) => {
+  draft.tabs = tabsReducer(draft.tabs, action);
+  return draft;
+});
 
 export const RootStoreContext = createContext<IRootStore>({
   state: DefaultRootState,
-  dispatch: () => {},
+  dispatch: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
 });

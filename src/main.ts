@@ -2,12 +2,9 @@ import { app, BrowserWindow, globalShortcut, BrowserView } from "electron";
 import * as path from "path";
 import { ActionFromMainProcessMessage } from "./lib/electron-context-bridge";
 import { IRendererAction } from "./actions/renderer-actions";
-import {
-  addAndSelectAppTabAction,
-  addAppTabAction,
-} from "./actions/tab-actions";
+import { addAndSelectAppTabAction } from "./actions/tab-actions";
 
-const isDev = require("electron-is-dev");
+const isDev = require("electron-is-dev"); // eslint-disable-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
 
 function createWindow() {
   // Create the browser window.
@@ -84,27 +81,28 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../dist/index.html")}`
-  );
+  mainWindow
+    .loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../dist/index.html")}`)
+    .catch(console.error);
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
+app
+  .whenReady()
+  .then(() => {
+    createWindow();
 
-  app.on("activate", () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
+    app.on("activate", () => {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  })
+  .catch(console.error);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

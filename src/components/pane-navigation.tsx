@@ -13,17 +13,11 @@ const PaneNavigation: React.FC<Props> = ({ appTab }) => {
   const [inputValue, setInputValue] = useState(appTab.url || "");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setInputValue(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        dispatch(
-          navigateToUrlAction(
-            appTab,
-            generateSearchUrl("google", inputValue.trim())
-          )
-        );
+        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", inputValue.trim())));
         break;
       case "Escape":
         setInputValue(appTab.url || "");

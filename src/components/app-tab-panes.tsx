@@ -12,14 +12,13 @@ interface Props {
 const AppTabPanes: React.FC<Props> = ({ appTab, visible }) => {
 
   useEffect(() => {
-    if (visible && (appTab.secondaryUrls.length === 0)) {
+    if (visible && (appTab.secondaryTabs.length === 0)) {
       // TODO: report secondary pane hidden
-      console.log("hide secondary", {appTabId: appTab.id})
     }
-  }, [appTab.secondaryUrls, visible])
+  }, [appTab.secondaryTabs, visible])
 
   const renderPanes = () => {
-    if (appTab.secondaryUrls.length === 0) {
+    if (appTab.secondaryTabs.length === 0) {
       return <PrimaryPane appTab={appTab} visible={visible} />
     }
 

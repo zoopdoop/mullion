@@ -9,7 +9,7 @@ interface Props {
 
 const PaneNavigation: React.FC<Props> = ({ appTab }) => {
   const { dispatch } = useContext(AppStateStoreContext)
-  const [inputValue, setInputValue] = useState(appTab.primaryUrl || "")
+  const [inputValue, setInputValue] = useState(appTab.url || "")
   const inputRef = useRef<HTMLInputElement|null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)
@@ -19,14 +19,14 @@ const PaneNavigation: React.FC<Props> = ({ appTab }) => {
         dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", inputValue.trim())))
         break;
       case 'Escape':
-        setInputValue(appTab.primaryUrl || "")
+        setInputValue(appTab.url || "")
         break;
     }
   }
 
   useEffect(() => {
-    setInputValue(appTab.primaryUrl || "")
-  }, [appTab.primaryUrl])
+    setInputValue(appTab.url || "")
+  }, [appTab.url])
 
   return (
     <div className="pane-navigation">

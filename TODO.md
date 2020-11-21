@@ -8,7 +8,6 @@
 
 ### Todo
 
-- [ ] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)  
 - [ ] Extend partial AppTab (show split and secondary pane)  
 - [ ] Implement partial SecondaryPaneInfo (show url)  
 - [ ] Implement SecondaryPaneTabBar  
@@ -21,6 +20,7 @@
 
 ### In Progress
 
+- [ ] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)  
 
 ### Done ✓
 

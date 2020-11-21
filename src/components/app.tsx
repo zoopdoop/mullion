@@ -10,7 +10,7 @@ interface Props {}
 const App: React.FC<Props> = () => {
   const electronContextBridge = useElectronContextBridge()
   const appStateStore = useAppStateStore()
-  const {state: {appTabs, selectedAppTabId}, dispatch} = appStateStore
+  const {appState: {appTabs, selectedAppTabId}, dispatch} = appStateStore
 
   useEffect(() => {
     if (electronContextBridge) {

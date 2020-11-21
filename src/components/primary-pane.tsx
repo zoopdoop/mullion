@@ -11,7 +11,7 @@ interface Props {
 
 const PrimaryPane: React.FC<Props> = ({appTab, visible}) => {
   const renderPane = () => {
-    const url = appTab.primaryUrl || INTERNAL_START_URL
+    const url = appTab.url || INTERNAL_START_URL
     if (isInternalUrl(url)) {
       return <InternalPane appTab={appTab} url={url} />
     }

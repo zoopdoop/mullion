@@ -3,10 +3,11 @@ import { IAppTab, INewAppTab } from "../models/app-tab";
 import { Id } from "../models/generic-types";
 import produce, { Draft } from "immer"
 import { WritableDraft } from "immer/dist/internal";
+import { INewSecondaryTab, ISecondaryTab } from "../models/secondary-tab";
 
 export interface IAppState {
   appTabs: IAppTab[]
-  nextAppTabId: Id
+  nextTabId: Id
   selectedAppTabId: Id
 }
 
@@ -14,17 +15,26 @@ const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
   return {
     id,
     title: newAppTab?.title || `New Tab (${id})`,
-    primaryUrl: newAppTab?.primaryUrl || null,
-    secondaryUrls: newAppTab?.secondaryUrls || [],
+    url: newAppTab?.url || null,
+    secondaryTabs: newAppTab?.secondaryTabs || [],
+    selectedSecondaryTabId: newAppTab?.secondaryTabs[0]?.id || 0,
     splitter: {
       percentage: 50
     }
   }
 }
 
+const createSecondaryTab = (id: Id, newSecondaryTab?: INewSecondaryTab): ISecondaryTab => {
+  return {
+    id,
+    title: newSecondaryTab?.title || `New Tab (${id})`,
+    url: newSecondaryTab?.url || null
+  }
+}
+
 const defaultAppState: IAppState = {
   appTabs: [createAppTab(1)],
-  nextAppTabId: 2,
+  nextTabId: 2,
   selectedAppTabId: 1,
 }
 
@@ -33,9 +43,10 @@ type IAction =
   | {type: "selectAppTab", value: {appTabId: Id}}
   | {type: "closeAppTab", value: {appTabId: Id}}
   | {type: "navigateToUrl", value: {appTabId: Id, url: string}}
+  | {type: "addSecondaryTab", value: {appTabId: Id, newSecondaryTab?: INewSecondaryTab, select?: boolean}}
 
 interface IAppStateStore {
-  state: IAppState
+  appState: IAppState
   dispatch: React.Dispatch<IAction>
 }
 
@@ -44,6 +55,8 @@ export const addAndSelectAppTabAction = (newAppTab?: INewAppTab): IAction => ({t
 export const selectAppTabAction = (appTab: IAppTab): IAction => ({type: "selectAppTab", value: {appTabId: appTab.id}})
 export const closeAppTabAction = (appTab: IAppTab): IAction => ({type: "closeAppTab", value: {appTabId: appTab.id}})
 export const navigateToUrlAction = (appTab: IAppTab, url: string): IAction => ({type: "navigateToUrl", value: {appTabId: appTab.id, url}})
+export const addSecondaryTabAction = (appTab: IAppTab, newSecondaryTab?: INewSecondaryTab): IAction => ({type: "addSecondaryTab", value: {appTabId: appTab.id, newSecondaryTab}})
+export const addAndSelectSecondaryTabAction = (appTab: IAppTab, newSecondaryTab?: INewSecondaryTab): IAction => ({type: "addSecondaryTab", value: {appTabId: appTab.id, newSecondaryTab, select: true}})
 
 const appStateReducer = produce((draft: Draft<IAppState>, action: IAction) => {
   const getAppTabIndex = (appTabId: Id) => draft.appTabs.findIndex(appTab => appTab.id === appTabId)
@@ -56,15 +69,27 @@ const appStateReducer = produce((draft: Draft<IAppState>, action: IAction) => {
 
   switch (action.type) {
     case "addAppTab":
-      const id = draft.nextAppTabId
-      draft.nextAppTabId += 1
-      draft.appTabs.push(createAppTab(id, action.value.newAppTab))
-      if (action.value.select) {
-        draft.selectedAppTabId = id
+      const appTabId = draft.nextTabId
+      draft.nextTabId += 1
+      draft.appTabs.push(createAppTab(appTabId, action.value.newAppTab))
+      if (action.value.select || (draft.appTabs.length === 1)) {
+        draft.selectedAppTabId = appTabId
       }
       // TODO: send message to create browser view
       break
 
+    case "addSecondaryTab":
+      const secondaryId = draft.nextTabId
+      draft.nextTabId += 1
+      updateAppTab(action.value.appTabId, (appTab) => {
+        appTab.secondaryTabs.push(createSecondaryTab(secondaryId, action.value.newSecondaryTab))
+        if (action.value.select || (appTab.secondaryTabs.length === 1)) {
+          appTab.selectedSecondaryTabId = secondaryId
+        }
+      })
+      // TODO: send message to create browser view
+      break
+  
     case "selectAppTab":
       draft.selectedAppTabId = action.value.appTabId
       break
@@ -86,7 +111,7 @@ const appStateReducer = produce((draft: Draft<IAppState>, action: IAction) => {
       break
 
     case "navigateToUrl":
-      updateAppTab(action.value.appTabId, (appTab) => appTab.primaryUrl = action.value.url)
+      updateAppTab(action.value.appTabId, (appTab) => appTab.url = action.value.url)
       // TODO: send message to navigate to url
       break
   }
@@ -95,8 +120,8 @@ const appStateReducer = produce((draft: Draft<IAppState>, action: IAction) => {
 })
 
 export const useAppStateStore = (): IAppStateStore => {
-  const [state, dispatch] = useReducer(appStateReducer, defaultAppState, () => defaultAppState)
-  return { state, dispatch }
+  const [appState, dispatch] = useReducer(appStateReducer, defaultAppState, () => defaultAppState)
+  return { appState, dispatch }
 }
 
-export const AppStateStoreContext = createContext<IAppStateStore>({state: defaultAppState, dispatch: () => {}})
+export const AppStateStoreContext = createContext<IAppStateStore>({appState: defaultAppState, dispatch: () => {}})

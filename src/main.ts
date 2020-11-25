@@ -1,11 +1,11 @@
 import { app, BrowserWindow } from "electron";
-import { setupIPCMainListeners } from "./ipc-main";
+import { addIPCMainListeners } from "./ipc-main";
 import { createMullionWindow } from "./window-manager";
 
 app
   .whenReady()
   .then(() => {
-    setupIPCMainListeners();
+    addIPCMainListeners();
 
     createMullionWindow();
 

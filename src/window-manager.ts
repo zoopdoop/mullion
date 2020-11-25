@@ -1,8 +1,9 @@
 import { BrowserWindow, BrowserView, app, ipcMain } from "electron";
 import * as path from "path";
+import { IBounds } from "./actions/main-process-actions";
 
 import { IRendererAction } from "./actions/renderer-actions";
-import { addAndSelectAppTabAction } from "./actions/tab-actions";
+import { addAndSelectAppTabAction, testSecondaryLinkFromPrimary } from "./actions/tab-actions";
 import { SendActionFromMainProcessMessage } from "./lib/electron-context-bridge";
 import getId from "./lib/get-id";
 import { getPreloadArgs } from "./lib/preload-args";
@@ -14,8 +15,8 @@ export interface IMullionWindow {
   id: Id;
   browserWindow: BrowserWindow;
   browserViews: Record<string, BrowserView>;
-  primaryBrowserViewId: Id | null;
-  secondaryBrowserViewId: Id | null;
+  primaryBrowserViewId?: Id;
+  secondaryBrowserViewId?: Id;
 }
 
 export const mullionWindows: Map<Id, IMullionWindow> = new Map<Id, IMullionWindow>();
@@ -41,8 +42,8 @@ export const createMullionWindow = (): void => {
     id: windowId,
     browserWindow,
     browserViews: {},
-    primaryBrowserViewId: null,
-    secondaryBrowserViewId: null,
+    primaryBrowserViewId: undefined,
+    secondaryBrowserViewId: undefined,
   };
   mullionWindows.set(windowId, window);
 
@@ -53,9 +54,12 @@ export const createMullionWindow = (): void => {
     .catch(console.error);
 };
 
-export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void => {
-  const sendActionToRenderer = (action: IRendererAction) => webContents.send(SendActionFromMainProcessMessage, action);
+const sendActionToRenderer = (webContents: Electron.WebContents, action: IRendererAction) => {
+  console.log("SENDING", action);
+  webContents.send(SendActionFromMainProcessMessage, action);
+};
 
+export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void => {
   webContents.on("before-input-event", (e, input) => {
     if (input.control && input.type === "keyDown") {
       let preventDefault = true;
@@ -64,7 +68,7 @@ export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void =>
           createMullionWindow();
           break;
         case "t":
-          sendActionToRenderer(addAndSelectAppTabAction());
+          sendActionToRenderer(webContents, addAndSelectAppTabAction());
           break;
         default:
           preventDefault = false;
@@ -75,4 +79,78 @@ export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void =>
       }
     }
   });
+};
+
+const googleRegEx = new RegExp("^https://www.google.com/search?");
+const EmptyBounds: Electron.Rectangle = { x: 0, y: 0, width: 0, height: 0 };
+
+export const createBrowserView = (
+  mullionWindow: IMullionWindow,
+  options: { browserViewId: Id; primary: boolean }
+): void => {
+  const { browserViewId, primary } = options;
+  const browserView = new BrowserView();
+  if (primary) {
+    browserView.webContents.addListener("will-navigate", (e, url) => {
+      if (!googleRegEx.test(url)) {
+        sendActionToRenderer(
+          mullionWindow.browserWindow.webContents,
+          testSecondaryLinkFromPrimary(browserViewId, { url })
+        );
+        e.preventDefault();
+      }
+    });
+  }
+  browserView.setBounds(EmptyBounds);
+  addKeyBoardShortcuts(browserView.webContents);
+  mullionWindow.browserViews[browserViewId] = browserView;
+  mullionWindow.browserWindow.addBrowserView(browserView);
+};
+
+export const setBrowserView = (
+  mullionWindow: IMullionWindow,
+  options: { browserViewId: Id; primary: boolean; bounds?: IBounds }
+): void => {
+  const { browserViewId, primary, bounds } = options;
+  hideBrowserView(mullionWindow, options);
+  const browserView = mullionWindow.browserViews[browserViewId];
+  if (browserView) {
+    if (primary) {
+      mullionWindow.primaryBrowserViewId = browserViewId;
+    } else {
+      mullionWindow.secondaryBrowserViewId = browserViewId;
+    }
+    if (bounds) {
+      browserView.setBounds(bounds);
+    }
+  }
+};
+
+export const hideBrowserView = (mullionWindow: IMullionWindow, options: { primary: boolean }): void => {
+  const browserViewId = options.primary ? mullionWindow.primaryBrowserViewId : mullionWindow.secondaryBrowserViewId;
+  if (browserViewId) {
+    mullionWindow.browserViews[browserViewId]?.setBounds(EmptyBounds);
+  }
+};
+
+export const closeBrowserView = (mullionWindow: IMullionWindow, options: { browserViewId: Id }): void => {
+  const { browserViewId } = options;
+  const browserView = mullionWindow.browserViews[browserViewId];
+  if (browserView) {
+    delete mullionWindow.browserViews[browserViewId];
+    mullionWindow.browserWindow.removeBrowserView(browserView);
+    if (browserViewId === mullionWindow.primaryBrowserViewId) {
+      mullionWindow.primaryBrowserViewId = undefined;
+    } else if (browserViewId === mullionWindow.secondaryBrowserViewId) {
+      mullionWindow.secondaryBrowserViewId = undefined;
+    }
+  }
+};
+
+export const navigateToUrl = (mullionWindow: IMullionWindow, options: { browserViewId: Id; url: string }): void => {
+  const { browserViewId, url } = options;
+  const browserView = mullionWindow.browserViews[browserViewId];
+  if (browserView) {
+    browserView.webContents.loadURL(url).catch(console.error);
+  }
 };

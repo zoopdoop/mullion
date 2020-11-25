@@ -6,10 +6,10 @@ import { INewAppTab, INewSecondaryTab, ITabAction } from "../actions/tab-actions
 import { IAppTab, ISecondaryTab } from "./tab-models";
 import { closeBrowserView, createBrowserView, navigateToUrlAction } from "../actions/main-process-actions";
 import { electronContextBridge } from "../lib/get-electron-context-bridge";
+import getId from "../lib/get-id";
 
 export interface ITabsState {
   appTabs: IAppTab[];
-  nextTabId: Id;
   selectedAppTabId: Id | undefined;
 }
 
@@ -22,10 +22,10 @@ const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
   const firstSecondaryTab = newAppTab?.secondaryTabs ? newAppTab?.secondaryTabs[0] : undefined;
   return {
     id,
-    title: newAppTab?.title || `New Tab (${id})`,
+    title: newAppTab?.title || "New Tab",
     url: newAppTab?.url || null,
     secondaryTabs: newAppTab?.secondaryTabs || [],
-    selectedSecondaryTabId: firstSecondaryTab?.id || 0,
+    selectedSecondaryTabId: firstSecondaryTab?.id,
     splitter: {
       percentage: 50,
     },
@@ -35,14 +35,13 @@ const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
 const createSecondaryTab = (id: Id, newSecondaryTab?: INewSecondaryTab): ISecondaryTab => {
   return {
     id,
-    title: newSecondaryTab?.title || `New Tab (${id})`,
+    title: newSecondaryTab?.title || "New Tab",
     url: newSecondaryTab?.url || null,
   };
 };
 
 export const DefaultTabsState: ITabsState = {
   appTabs: [],
-  nextTabId: 1,
   selectedAppTabId: undefined,
 };
 
@@ -57,8 +56,7 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
 
   switch (action.type) {
     case "addAppTab":
-      const appTabId = draft.nextTabId;
-      draft.nextTabId += 1;
+      const appTabId = getId();
       const appTab = createAppTab(appTabId, action.value.newAppTab);
       draft.appTabs.push(appTab);
       if (action.value.select || draft.appTabs.length === 1) {
@@ -68,8 +66,7 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       break;
 
     case "addSecondaryTab":
-      const secondaryId = draft.nextTabId;
-      draft.nextTabId += 1;
+      const secondaryId = getId();
       const secondaryTab = createSecondaryTab(secondaryId, action.value.newSecondaryTab);
       updateAppTab(action.value.appTabId, appTab => {
         appTab.secondaryTabs.push(secondaryTab);

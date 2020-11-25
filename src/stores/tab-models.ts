@@ -5,7 +5,7 @@ export interface IAppTab {
   title: string | null;
   url: Url;
   secondaryTabs: ISecondaryTab[];
-  selectedSecondaryTabId: Id;
+  selectedSecondaryTabId?: Id;
   splitter: {
     position?: number;
     percentage: number;

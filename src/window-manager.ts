@@ -70,8 +70,12 @@ const sendActionToRenderer = (webContents: Electron.WebContents, action: IRender
   webContents.send(SendActionFromMainProcessMessage, action);
 };
 
-export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void => {
-  webContents.on("before-input-event", (e, input) => {
+export const addKeyBoardShortcuts = (
+  fromWebContents: Electron.WebContents,
+  toWebContents?: Electron.WebContents
+): void => {
+  const sendToWebContents = toWebContents || fromWebContents;
+  fromWebContents.on("before-input-event", (e, input) => {
     if (input.control && input.type === "keyDown") {
       let preventDefault = true;
       switch (input.key.toLowerCase()) {
@@ -79,7 +83,7 @@ export const addKeyBoardShortcuts = (webContents: Electron.WebContents): void =>
           createMullionWindow();
           break;
         case "t":
-          sendActionToRenderer(webContents, addAndSelectAppTabAction());
+          sendActionToRenderer(sendToWebContents, addAndSelectAppTabAction());
           break;
         default:
           preventDefault = false;
@@ -113,7 +117,7 @@ export const createBrowserView = (
     });
   }
   browserView.setBounds(EmptyBounds);
-  addKeyBoardShortcuts(browserView.webContents);
+  addKeyBoardShortcuts(browserView.webContents, mullionWindow.browserWindow.webContents);
   mullionWindow.browserViews[browserViewId] = browserView;
   mullionWindow.browserWindow.addBrowserView(browserView);
 };

@@ -38,16 +38,27 @@ export const createMullionWindow = (): void => {
   });
   // mainWindow.setMenu(null)
 
-  const window: IMullionWindow = {
+  const mullionWindow: IMullionWindow = {
     id: windowId,
     browserWindow,
     browserViews: {},
     primaryBrowserViewId: undefined,
     secondaryBrowserViewId: undefined,
   };
-  mullionWindows.set(windowId, window);
+  mullionWindows.set(windowId, mullionWindow);
 
   addKeyBoardShortcuts(browserWindow.webContents);
+
+  browserWindow.on("close", () => {
+    browserWindow.getBrowserViews().forEach(browserView => {
+      browserWindow.removeBrowserView(browserView);
+      browserView.destroy();
+    });
+    mullionWindow.browserViews = {};
+    mullionWindow.primaryBrowserViewId = undefined;
+    mullionWindow.secondaryBrowserViewId = undefined;
+    mullionWindows.delete(mullionWindow.id);
+  });
 
   browserWindow
     .loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../dist/index.html")}`)
@@ -153,4 +164,8 @@ export const navigateToUrl = (mullionWindow: IMullionWindow, options: { browserV
   if (browserView) {
     browserView.webContents.loadURL(url).catch(console.error);
   }
+};
+
+export const closeWindow = (mullionWindow: IMullionWindow): void => {
+  mullionWindow.browserWindow.close();
 };

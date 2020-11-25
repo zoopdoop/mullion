@@ -13,7 +13,8 @@ export type IBrowserViewAction =
   | { type: "setBrowserView"; value: { browserViewId: Id; primary: boolean; hidden?: boolean; bounds?: IBounds } }
   | { type: "hideBrowserView"; value: { primary: boolean } }
   | { type: "closeBrowserView"; value: { browserViewId: Id } }
-  | { type: "navigateToUrl"; value: { browserViewId: Id; url: string } };
+  | { type: "navigateToUrl"; value: { browserViewId: Id; url: string } }
+  | { type: "closeWindow" };
 
 export type IMainProcessActions = IBrowserViewAction;
 
@@ -36,4 +37,7 @@ export const closeBrowserView = (tab: IAppTab | ISecondaryTab): IBrowserViewActi
 export const navigateToUrlAction = (tab: IAppTab | ISecondaryTab, url: string): IBrowserViewAction => ({
   type: "navigateToUrl",
   value: { browserViewId: tab.id, url },
+});
+export const closeWindowAction = (): IBrowserViewAction => ({
+  type: "closeWindow",
 });

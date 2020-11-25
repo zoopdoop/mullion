@@ -4,7 +4,12 @@ import { WritableDraft } from "immer/dist/internal";
 import { Id } from "./generic-types";
 import { INewAppTab, INewSecondaryTab, ITabAction } from "../actions/tab-actions";
 import { IAppTab, ISecondaryTab } from "./tab-models";
-import { closeBrowserView, createBrowserView, navigateToUrlAction } from "../actions/main-process-actions";
+import {
+  closeBrowserView,
+  closeWindowAction,
+  createBrowserView,
+  navigateToUrlAction,
+} from "../actions/main-process-actions";
 import { electronContextBridge } from "../lib/get-electron-context-bridge";
 import getId from "../lib/get-id";
 
@@ -99,7 +104,7 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
           electronContextBridge?.sendActionToMainProcess(closeBrowserView(appTab));
         }
       } else {
-        // TODO: send message to close window
+        electronContextBridge?.sendActionToMainProcess(closeWindowAction());
       }
       break;
 

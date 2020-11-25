@@ -11,7 +11,8 @@
 - [ ] Implement SecondaryPaneTabBar/Tabs  
 - [ ] Implement partial SecondaryPaneInfo (show url)  
 - [ ] Update DummyPane to not show anything until after a timeout
-- [ ] Hook up events to navigation 
+- [ ] Hook up events to navigation UI (url, back, forward, reload/loading, ssl status)
+- [ ] Hook up page-title-updated event to tab and limit tab width
 - [ ] Extend partial PrimaryPane (add push to secondary url list using control click)  
 - [ ] Implement Splitter  
 - [ ] Extend AppTabBar (drag reorder)  
@@ -21,6 +22,7 @@
 
 ### Done ✓
 
+- [x] Add close window/app on last tab close
 - [x] Update ids to use multiple windows
 - [x] Add multiple window handling to main process
 - [x] Add messages to resize BrowserViews

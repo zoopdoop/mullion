@@ -2,6 +2,7 @@ import { ipcMain } from "electron";
 import { IWrappedMainProcessAction, SendActionFromRendererProcessMessage } from "./lib/electron-context-bridge";
 import {
   closeBrowserView,
+  closeWindow,
   createBrowserView,
   hideBrowserView,
   mullionWindows,
@@ -39,6 +40,10 @@ export const addIPCMainListeners = (): void => {
 
       case "navigateToUrl":
         navigateToUrl(mullionWindow, action.value);
+        break;
+
+      case "closeWindow":
+        closeWindow(mullionWindow);
         break;
     }
   });

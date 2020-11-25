@@ -4,11 +4,13 @@ import { WritableDraft } from "immer/dist/internal";
 import { Id } from "./generic-types";
 import { INewAppTab, INewSecondaryTab, ITabAction } from "../actions/tab-actions";
 import { IAppTab, ISecondaryTab } from "./tab-models";
+import { closeBrowserView, createBrowserView, navigateToUrlAction } from "../actions/main-process-actions";
+import { electronContextBridge } from "../lib/get-electron-context-bridge";
 
 export interface ITabsState {
   appTabs: IAppTab[];
   nextTabId: Id;
-  selectedAppTabId: Id;
+  selectedAppTabId: Id | undefined;
 }
 
 export interface ITabsStateStore {
@@ -17,12 +19,13 @@ export interface ITabsStateStore {
 }
 
 const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
+  const firstSecondaryTab = newAppTab?.secondaryTabs ? newAppTab?.secondaryTabs[0] : undefined;
   return {
     id,
     title: newAppTab?.title || `New Tab (${id})`,
     url: newAppTab?.url || null,
     secondaryTabs: newAppTab?.secondaryTabs || [],
-    selectedSecondaryTabId: newAppTab?.secondaryTabs[0]?.id || 0,
+    selectedSecondaryTabId: firstSecondaryTab?.id || 0,
     splitter: {
       percentage: 50,
     },
@@ -38,9 +41,9 @@ const createSecondaryTab = (id: Id, newSecondaryTab?: INewSecondaryTab): ISecond
 };
 
 export const DefaultTabsState: ITabsState = {
-  appTabs: [createAppTab(1)],
-  nextTabId: 2,
-  selectedAppTabId: 1,
+  appTabs: [],
+  nextTabId: 1,
+  selectedAppTabId: undefined,
 };
 
 export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction) => {
@@ -56,23 +59,30 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
     case "addAppTab":
       const appTabId = draft.nextTabId;
       draft.nextTabId += 1;
-      draft.appTabs.push(createAppTab(appTabId, action.value.newAppTab));
+      const appTab = createAppTab(appTabId, action.value.newAppTab);
+      draft.appTabs.push(appTab);
       if (action.value.select || draft.appTabs.length === 1) {
         draft.selectedAppTabId = appTabId;
       }
-      // TODO: send message to create browser view
+      electronContextBridge?.sendActionToMainProcess(createBrowserView(appTab, true));
       break;
 
     case "addSecondaryTab":
       const secondaryId = draft.nextTabId;
       draft.nextTabId += 1;
+      const secondaryTab = createSecondaryTab(secondaryId, action.value.newSecondaryTab);
       updateAppTab(action.value.appTabId, appTab => {
-        appTab.secondaryTabs.push(createSecondaryTab(secondaryId, action.value.newSecondaryTab));
+        appTab.secondaryTabs.push(secondaryTab);
         if (action.value.select || appTab.secondaryTabs.length === 1) {
           appTab.selectedSecondaryTabId = secondaryId;
         }
       });
-      // TODO: send message to create browser view
+      electronContextBridge?.sendActionToMainProcess(createBrowserView(secondaryTab, false));
+      if (action.value.newSecondaryTab?.url) {
+        electronContextBridge?.sendActionToMainProcess(
+          navigateToUrlAction(secondaryTab, action.value.newSecondaryTab.url)
+        );
+      }
       break;
 
     case "selectAppTab":
@@ -84,20 +94,23 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       if (numAppTabs > 1) {
         const index = getAppTabIndex(action.value.appTabId);
         if (index !== -1) {
+          const appTab = draft.appTabs[index];
           draft.appTabs.splice(index, 1);
           if (action.value.appTabId === draft.selectedAppTabId) {
             draft.selectedAppTabId = (draft.appTabs[index] || draft.appTabs[index - 1]).id;
           }
+          electronContextBridge?.sendActionToMainProcess(closeBrowserView(appTab));
         }
-        // TODO: send message to delete browser views
       } else {
         // TODO: send message to close window
       }
       break;
 
     case "navigateToUrl":
-      updateAppTab(action.value.appTabId, appTab => (appTab.url = action.value.url));
-      // TODO: send message to navigate to url
+      updateAppTab(action.value.appTabId, appTab => {
+        electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(appTab, action.value.url));
+        appTab.url = action.value.url;
+      });
       break;
   }
 

@@ -8,10 +8,10 @@
 
 ### Todo
 
-- [ ] Extend partial AppTab (show split and secondary pane)  
-- [ ] Implement partial SecondaryPaneInfo (show url)  
+- [ ] Add messages to resize BrowserViews
 - [ ] Implement SecondaryPaneTabBar  
 - [ ] Implement SecondaryPaneTabs  
+- [ ] Implement partial SecondaryPaneInfo (show url)  
 - [ ] Extend partial PrimaryPane (add push to secondary url list using control click)  
 - [ ] Implement Splitter  
 - [ ] Implement BrowserView manager in main renderer (CRUD per pane, manages resizing with splitter/window  
@@ -20,10 +20,12 @@
 
 ### In Progress
 
-- [ ] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)  
+- [ ] Add messages to create BrowserViews
 
 ### Done ✓
 
+- [x] Extend partial AppTab (show split and secondary pane)  
+- [x] Extend partial PrimaryPane (add fake link which sets secondary url list or adds AppTab)  
 - [x] Implement partial PaneNavigation (url input box and load url)  
 - [x] Implement partial DummyPane (show url)  
 - [x] Implement partial AppTab (split status, primary url)  

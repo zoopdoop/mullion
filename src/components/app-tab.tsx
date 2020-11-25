@@ -13,8 +13,8 @@ const AppTab: React.FC<Props> = ({ appTab, visible }) => {
   const className = generateClassName("app-tab", { hidden: !visible });
   return (
     <div className={className}>
-      <AppTabToolbar appTab={appTab} />
-      <AppTabPanes appTab={appTab} visible={visible} />
+      <AppTabToolbar key={`app-tab-toolbar-${appTab.id}`} appTab={appTab} />
+      <AppTabPanes key={`app-tab-panes-${appTab.id}`} appTab={appTab} visible={visible} />
     </div>
   );
 };

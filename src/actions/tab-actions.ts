@@ -46,3 +46,7 @@ export const addAndSelectSecondaryTabAction = (appTab: IAppTab, newSecondaryTab?
   type: "addSecondaryTab",
   value: { appTabId: appTab.id, newSecondaryTab, select: true },
 });
+export const testSecondaryLinkFromPrimary = (appTabId: Id, newSecondaryTab?: INewSecondaryTab): ITabAction => ({
+  type: "addSecondaryTab",
+  value: { appTabId, newSecondaryTab, select: true },
+});

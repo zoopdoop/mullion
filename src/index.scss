@@ -144,15 +144,25 @@ body {
 
 .secondary-pane {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .secondary-pane-tab-bar {
 }
 
 .secondary-pane-tabs {
+  flex-grow: 1;
 }
 
 .secondary-pane-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &.hidden {
+    display: none;
+  }
 }
 
 .secondary-pane-tab-toolbar {

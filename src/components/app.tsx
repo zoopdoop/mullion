@@ -4,7 +4,8 @@ import AppTabs from "./app-tabs";
 
 import { useRootStore } from "../hooks/use-root-store";
 import { RootStoreContext } from "../stores/root-store";
-import { useElectronContextBridgeRef } from "../hooks/use-electron-context-bridge-ref";
+import { electronContextBridge } from "../lib/get-electron-context-bridge";
+import { addAndSelectAppTabAction } from "../actions/tab-actions";
 
 interface Props {}
 
@@ -16,19 +17,17 @@ const App: React.FC<Props> = () => {
     },
     dispatch,
   } = rootStore;
-  const electronContextBridgeRef = useElectronContextBridgeRef();
 
   useEffect(() => {
-    if (electronContextBridgeRef.current) {
-      electronContextBridgeRef.current.onActionFromMainProcess(dispatch);
-    }
-  }, [electronContextBridgeRef, dispatch]);
+    electronContextBridge?.onActionFromMainProcess(dispatch);
+    dispatch(addAndSelectAppTabAction());
+  }, [dispatch]);
 
   return (
     <RootStoreContext.Provider value={rootStore}>
       <div className="app">
-        <AppTabBar tabs={appTabs} selectedAppTabId={selectedAppTabId} />
-        <AppTabs appTabs={appTabs} selectedAppTabId={selectedAppTabId} />
+        {selectedAppTabId ? <AppTabBar tabs={appTabs} selectedAppTabId={selectedAppTabId} /> : undefined}
+        {selectedAppTabId ? <AppTabs appTabs={appTabs} selectedAppTabId={selectedAppTabId} /> : undefined}
       </div>
     </RootStoreContext.Provider>
   );

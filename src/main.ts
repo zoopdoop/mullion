@@ -1,10 +1,22 @@
-import { app, BrowserWindow, globalShortcut, BrowserView } from "electron";
+import { app, BrowserWindow, ipcMain, BrowserView } from "electron";
 import * as path from "path";
-import { ActionFromMainProcessMessage } from "./lib/electron-context-bridge";
+import { SendActionFromMainProcessMessage, SendActionFromRendererProcessMessage } from "./lib/electron-context-bridge";
 import { IRendererAction } from "./actions/renderer-actions";
-import { addAndSelectAppTabAction } from "./actions/tab-actions";
+import {
+  addAndSelectAppTabAction,
+  addAndSelectSecondaryTabAction,
+  testSecondaryLinkFromPrimary,
+} from "./actions/tab-actions";
+import { IMainProcessActions } from "./actions/main-process-actions";
+import { Id } from "./stores/generic-types";
 
 const isDev = require("electron-is-dev"); // eslint-disable-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
+
+const browserViews: Record<string, BrowserView> = {};
+let primaryBrowserViewId: Id | null = null;
+let secondaryBrowserViewId: Id | null = null;
+
+const EmptyBounds: Electron.Rectangle = { x: 0, y: 0, width: 0, height: 0 };
 
 function createWindow() {
   // Create the browser window.
@@ -20,52 +32,84 @@ function createWindow() {
   });
   // mainWindow.setMenu(null)
 
-  /*
-  // proof of concept with two pane Google search
-
-  let twoPanes = false
-  const layout = () => {
-    setTimeout(() => {
-      const bounds = mainWindow.getBounds()
-      const {width, height} = bounds
-      const halfWidth = Math.round(width / 2)
-      if (twoPanes) {
-        leftView.setBounds({x: 0, y: 0, width: halfWidth, height})
-        rightView.setBounds({x: halfWidth, y: 0, width: bounds.width - halfWidth, height})
-      } else {
-        leftView.setBounds({x: 0, y: 0, width, height})
-        rightView.setBounds({x: 0, y: 0, width: 0, height: 0})
-      }
-    }, 0)
-  }
-
-  const leftView = new BrowserView();
-  const rightView = new BrowserView();
-  mainWindow.addBrowserView(leftView);
-  mainWindow.addBrowserView(rightView);
-  leftView.setBounds({x: 0, y: 0, width: 0, height: 0});
-  leftView.webContents.loadURL("https://www.google.com/");
-  rightView.setBounds({x: 0, y: 0, width: 0, height: 0});
-  layout()
-
-  const googleRegEx = new RegExp("^https://www.google.com/search?")
-  leftView.webContents.addListener("will-navigate", (e, url) => {
-    if (googleRegEx.test(url)) {
-      leftView.webContents.loadURL(url);
-    } else {
-      rightView.webContents.loadURL(url);
-      twoPanes = true
-    }
-    layout()
-    e.preventDefault()
-  })
-
-  mainWindow.on("resize", () => layout())
-  */
-
   const sendActionToRenderer = (action: IRendererAction) => {
-    mainWindow.webContents.send(ActionFromMainProcessMessage, action);
+    mainWindow.webContents.send(SendActionFromMainProcessMessage, action);
   };
+
+  const googleRegEx = new RegExp("^https://www.google.com/search?");
+
+  ipcMain.on(SendActionFromRendererProcessMessage as any, (e, action: IMainProcessActions) => {
+    console.log("GOT", SendActionFromRendererProcessMessage, action);
+    let browserView: BrowserView;
+    let browserViewId: Id;
+    let id: Id | null;
+
+    switch (action.type) {
+      case "createBrowserView":
+        browserViewId = action.value.browserViewId;
+        browserView = new BrowserView();
+        if (action.value.primary) {
+          browserView.webContents.addListener("will-navigate", (e, url) => {
+            if (!googleRegEx.test(url)) {
+              sendActionToRenderer(testSecondaryLinkFromPrimary(browserViewId, { url }));
+              e.preventDefault();
+            }
+          });
+        }
+        browserView.setBounds(EmptyBounds);
+        browserViews[browserViewId] = browserView;
+        mainWindow.addBrowserView(browserView);
+        break;
+
+      case "setBrowserView":
+        browserViewId = action.value.browserViewId;
+        id = action.value.primary ? primaryBrowserViewId : secondaryBrowserViewId;
+        if (id) {
+          browserView = browserViews[id];
+          browserView?.setBounds(EmptyBounds);
+        }
+        browserView = browserViews[browserViewId];
+        if (browserView) {
+          if (action.value.primary) {
+            primaryBrowserViewId = browserViewId;
+          } else {
+            secondaryBrowserViewId = browserViewId;
+          }
+          if (action.value.bounds) {
+            browserView.setBounds(action.value.bounds);
+          }
+        }
+        break;
+
+      case "hideBrowserView":
+        id = action.value.primary ? primaryBrowserViewId : secondaryBrowserViewId;
+        if (id) {
+          browserView = browserViews[id];
+          browserView?.setBounds(EmptyBounds);
+        }
+        break;
+
+      case "closeBrowserView":
+        browserView = browserViews[action.value.browserViewId];
+        if (browserView) {
+          delete browserViews[action.value.browserViewId];
+          mainWindow.removeBrowserView(browserView);
+          if (action.value.browserViewId === primaryBrowserViewId) {
+            primaryBrowserViewId = null;
+          } else if (action.value.browserViewId === secondaryBrowserViewId) {
+            secondaryBrowserViewId = null;
+          }
+        }
+        break;
+
+      case "navigateToUrl":
+        browserView = browserViews[action.value.browserViewId];
+        if (browserView) {
+          browserView.webContents.loadURL(action.value.url).catch(console.error);
+        }
+        break;
+    }
+  });
 
   mainWindow.webContents.on("before-input-event", (e, input) => {
     if (input.control) {

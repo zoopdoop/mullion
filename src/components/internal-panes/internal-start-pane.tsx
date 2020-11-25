@@ -33,7 +33,7 @@ const InternalStartPane: React.FC<Props> = ({ appTab }) => {
   }, [searchRef]);
 
   return (
-    <div className="internal-start-pane">
+    <div className="internal-start-pane" key={appTab.id}>
       <div>
         <h1>Mullion</h1>
       </div>

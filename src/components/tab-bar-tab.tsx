@@ -1,12 +1,12 @@
 import React from "react";
 import generateClassName from "../lib/generate-classname";
-import { IAppTab, ISecondaryTab } from "../stores/tab-models";
+import { IBrowserTab } from "../stores/tab-models";
 
 interface Props {
-  tab: IAppTab | ISecondaryTab;
+  tab: IBrowserTab;
   selected: boolean;
-  onSelectTab: (tab: IAppTab | ISecondaryTab) => void;
-  onCloseTab: (tab: IAppTab | ISecondaryTab) => void;
+  onSelectTab: (tab: IBrowserTab) => void;
+  onCloseTab: (tab: IBrowserTab) => void;
 }
 
 const TabBarTab: React.FC<Props> = ({ tab, selected, onSelectTab, onCloseTab }) => {

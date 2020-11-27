@@ -1,23 +1,23 @@
 import React from "react";
 import { render } from "react-dom";
 import { INTERNAL_START_URL, isInternalUrl } from "../lib/internal-urls";
-import { IAppTab } from "../stores/tab-models";
+import { IAppTab, IBrowserTab } from "../stores/tab-models";
 import InternalStartPane from "./internal-panes/internal-start-pane";
 import InternalUnknownPane from "./internal-panes/internal-unknown-pane";
 
 interface Props {
-  appTab: IAppTab;
+  tab: IBrowserTab;
   url: string;
 }
 
-const InternalPane: React.FC<Props> = ({ appTab, url }) => {
+const InternalPane: React.FC<Props> = ({ tab, url }) => {
   const renderInternalPane = () => {
     switch (url) {
       case INTERNAL_START_URL:
-        return <InternalStartPane appTab={appTab} />;
+        return <InternalStartPane tab={tab} />;
 
       default:
-        return <InternalUnknownPane appTab={appTab} url={url} />;
+        return <InternalUnknownPane tab={tab} url={url} />;
     }
   };
 

@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { navigateToUrlAction } from "../../actions/tab-actions";
 import { generateSearchUrl } from "../../lib/generate-search-url";
-import { IAppTab } from "../../stores/tab-models";
+import { IAppTab, IBrowserTab } from "../../stores/tab-models";
 import { RootStoreContext } from "../../stores/root-store";
 
 interface Props {
-  appTab: IAppTab;
+  tab: IBrowserTab;
 }
 
-const InternalStartPane: React.FC<Props> = ({ appTab }) => {
+const InternalStartPane: React.FC<Props> = ({ tab }) => {
   const { dispatch } = useContext(RootStoreContext);
   const searchRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "Enter":
-        dispatch(navigateToUrlAction(appTab, generateSearchUrl("google", searchRef.current?.value)));
+        dispatch(navigateToUrlAction(tab, generateSearchUrl("google", searchRef.current?.value)));
         break;
 
       case "Escape":
@@ -33,7 +33,7 @@ const InternalStartPane: React.FC<Props> = ({ appTab }) => {
   }, [searchRef]);
 
   return (
-    <div className="internal-start-pane" key={appTab.id}>
+    <div className="internal-start-pane" key={tab.id}>
       <div>
         <h1>Mullion</h1>
       </div>

@@ -1,14 +1,14 @@
 import React from "react";
-import { IAppTab, ISecondaryTab } from "../stores/tab-models";
+import { IBrowserTab } from "../stores/tab-models";
 import { Id } from "../stores/generic-types";
 import TabBarTab from "./tab-bar-tab";
 
 interface Props {
-  tabs: (IAppTab | ISecondaryTab)[];
+  tabs: IBrowserTab[];
   selectedTabId?: Id;
   onAddTab: () => void;
-  onSelectTab: (tab: IAppTab | ISecondaryTab) => void;
-  onCloseTab: (tab: IAppTab | ISecondaryTab) => void;
+  onSelectTab: (tab: IBrowserTab) => void;
+  onCloseTab: (tab: IBrowserTab) => void;
 }
 
 const TabBar: React.FC<Props> = ({ tabs, selectedTabId, onAddTab, onSelectTab, onCloseTab }) => {

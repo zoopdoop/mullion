@@ -1,5 +1,5 @@
 import { Id } from "../stores/generic-types";
-import { IAppTab, ISecondaryTab } from "../stores/tab-models";
+import { IBrowserTab } from "../stores/tab-models";
 
 export interface IBounds {
   x: number;
@@ -14,11 +14,13 @@ export type IBrowserViewAction =
   | { type: "hideBrowserView"; value: { primary: boolean } }
   | { type: "closeBrowserView"; value: { browserViewId: Id } }
   | { type: "navigateToUrl"; value: { browserViewId: Id; url: string } }
+  | { type: "stop"; value: { browserViewId: Id } }
+  | { type: "reload"; value: { browserViewId: Id } }
   | { type: "closeWindow" };
 
 export type IMainProcessActions = IBrowserViewAction;
 
-export const createBrowserView = (tab: IAppTab | ISecondaryTab, primary: boolean): IBrowserViewAction => ({
+export const createBrowserView = (tab: IBrowserTab, primary: boolean): IBrowserViewAction => ({
   type: "createBrowserView",
   value: { browserViewId: tab.id, primary },
 });
@@ -30,13 +32,21 @@ export const hideBrowserView = (primary: boolean): IBrowserViewAction => ({
   type: "hideBrowserView",
   value: { primary },
 });
-export const closeBrowserView = (tab: IAppTab | ISecondaryTab): IBrowserViewAction => ({
+export const closeBrowserView = (tab: IBrowserTab): IBrowserViewAction => ({
   type: "closeBrowserView",
   value: { browserViewId: tab.id },
 });
-export const navigateToUrlAction = (tab: IAppTab | ISecondaryTab, url: string): IBrowserViewAction => ({
+export const navigateToUrlAction = (tab: IBrowserTab, url: string): IBrowserViewAction => ({
   type: "navigateToUrl",
   value: { browserViewId: tab.id, url },
+});
+export const stopAction = (browserViewId: Id): IBrowserViewAction => ({
+  type: "stop",
+  value: { browserViewId },
+});
+export const reloadAction = (browserViewId: Id): IBrowserViewAction => ({
+  type: "reload",
+  value: { browserViewId },
 });
 export const closeWindowAction = (): IBrowserViewAction => ({
   type: "closeWindow",

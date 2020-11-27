@@ -23,9 +23,9 @@ const PrimaryPane: React.FC<Props> = ({ appTab, visible }) => {
   const renderPane = () => {
     const url = getUrl(appTab.url);
     if (isInternalUrl(url)) {
-      return <InternalPane key={appTab.id} appTab={appTab} url={url} />;
+      return <InternalPane key={appTab.id} tab={appTab} url={url} />;
     }
-    return <DummyPane key={appTab.id} appTab={appTab} url={url} visible={visible} />;
+    return <DummyPane key={appTab.id} tab={appTab} visible={visible} />;
   };
 
   return (

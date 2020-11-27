@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../actions/tab-actions";
-import { IAppTab, ISecondaryTab } from "../stores/tab-models";
+import { IAppTab, IBrowserTab } from "../stores/tab-models";
 import { Id } from "../stores/generic-types";
 import { RootStoreContext } from "../stores/root-store";
 import TabBar from "./tab-bar";
@@ -14,8 +14,8 @@ const AppTabBar: React.FC<Props> = ({ tabs, selectedAppTabId }) => {
   const { dispatch } = useContext(RootStoreContext);
 
   const handleAddAppTab = () => dispatch(addAndSelectAppTabAction());
-  const handleSelectAppTab = (appTab: IAppTab | ISecondaryTab) => dispatch(selectAppTabAction(appTab as IAppTab));
-  const handleCloseAppTab = (appTab: IAppTab | ISecondaryTab) => dispatch(closeAppTabAction(appTab as IAppTab));
+  const handleSelectAppTab = (appTab: IBrowserTab) => dispatch(selectAppTabAction(appTab as IAppTab));
+  const handleCloseAppTab = (appTab: IBrowserTab) => dispatch(closeAppTabAction(appTab as IAppTab));
 
   return (
     <div className="app-tab-bar">

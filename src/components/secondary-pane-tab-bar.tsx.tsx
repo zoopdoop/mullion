@@ -5,7 +5,7 @@ import {
   selectSecondaryTabAction,
 } from "../actions/tab-actions";
 import { RootStoreContext } from "../stores/root-store";
-import { IAppTab, ISecondaryTab } from "../stores/tab-models";
+import { IAppTab, IBrowserTab, ISecondaryTab } from "../stores/tab-models";
 import TabBar from "./tab-bar";
 
 interface Props {
@@ -17,9 +17,9 @@ const SecondaryPaneTabBar: React.FC<Props> = ({ appTab, visible }) => {
   const { dispatch } = useContext(RootStoreContext);
 
   const handleAddSecondaryTab = () => dispatch(addAndSelectSecondaryTabAction(appTab));
-  const handleSelectSecondaryTab = (secondaryTab: IAppTab | ISecondaryTab) =>
+  const handleSelectSecondaryTab = (secondaryTab: IBrowserTab) =>
     dispatch(selectSecondaryTabAction(appTab, secondaryTab as ISecondaryTab));
-  const handleCloseSecondaryTab = (secondaryTab: IAppTab | ISecondaryTab) =>
+  const handleCloseSecondaryTab = (secondaryTab: IBrowserTab) =>
     dispatch(closeSecondaryTabAction(appTab, secondaryTab as ISecondaryTab));
 
   return (

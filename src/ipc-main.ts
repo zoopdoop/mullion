@@ -8,6 +8,8 @@ import {
   mullionWindows,
   navigateToUrl,
   setBrowserView,
+  reload,
+  stop,
 } from "./window-manager";
 
 export const addIPCMainListeners = (): void => {
@@ -43,6 +45,14 @@ export const addIPCMainListeners = (): void => {
 
       case "closeWindow":
         closeWindow(mullionWindow);
+        break;
+
+      case "reload":
+        reload(mullionWindow, action.value);
+        break;
+
+      case "stop":
+        stop(mullionWindow, action.value);
         break;
     }
   });

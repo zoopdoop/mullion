@@ -1,9 +1,15 @@
 import { Id, Url } from "./generic-types";
 
-export interface IAppTab {
+export interface IBrowserTab {
   id: Id;
   title: string | null;
   url: Url;
+  history: Url[];
+  historyIndex: number;
+  state: "loading" | "loaded";
+}
+
+export interface IAppTab extends IBrowserTab {
   secondaryTabs: ISecondaryTab[];
   selectedSecondaryTabId?: Id;
   splitter: {
@@ -12,8 +18,4 @@ export interface IAppTab {
   };
 }
 
-export interface ISecondaryTab {
-  id: Id;
-  title: string | null;
-  url: Url;
-}
+export interface ISecondaryTab extends IBrowserTab {}

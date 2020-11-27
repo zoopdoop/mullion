@@ -8,6 +8,7 @@
 
 ### Todo
 
+- [ ] Switch from MIT to MPL
 - [ ] Update DummyPane to not show anything until after a timeout
 - [ ] Hook up page-title-updated event to tab and limit tab width
 - [ ] Extend partial PrimaryPane (add push to secondary url list using control click)  

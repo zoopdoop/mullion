@@ -1,3 +1,3 @@
 export type Id = string;
 
-export type Url = string | null;
+export type Url = string;

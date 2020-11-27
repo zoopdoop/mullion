@@ -81,18 +81,37 @@ body {
 }
 
 .pane-navigation {
+  margin-left: 5px;
   padding: 5px;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
 
-  input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 3px 5px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 1em;
-    border-radius: 5px;
-    background-color: #eee;
+  .pane-navigation-icons {
+    flex-grow: 0;
+    margin-top: 3px;
+
+    svg {
+      margin-right: 10px;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+
+  .pane-navigation-input {
+    flex-grow: 1;
+    margin-right: 5px;
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 3px 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 1em;
+      border-radius: 5px;
+      background-color: #eee;
+    }
   }
 }
 
@@ -148,9 +167,6 @@ body {
   flex-direction: column;
 }
 
-.secondary-pane-tab-bar {
-}
-
 .secondary-pane-tabs {
   flex-grow: 1;
 }
@@ -163,9 +179,6 @@ body {
   &.hidden {
     display: none;
   }
-}
-
-.secondary-pane-tab-toolbar {
 }
 
 .dummy-pane {

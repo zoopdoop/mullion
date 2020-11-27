@@ -3,9 +3,15 @@ import * as path from "path";
 import { IBounds } from "./actions/main-process-actions";
 
 import { IRendererAction } from "./actions/renderer-actions";
-import { addAndSelectAppTabAction, testSecondaryLinkFromPrimary } from "./actions/tab-actions";
+import {
+  addAndSelectAppTabAction,
+  browserViewEventAction,
+  ITabAction,
+  testSecondaryLinkFromPrimary,
+} from "./actions/tab-actions";
 import { SendActionFromMainProcessMessage } from "./lib/electron-context-bridge";
 import getId from "./lib/get-id";
+import { isInternalUrl } from "./lib/internal-urls";
 import { getPreloadArgs } from "./lib/preload-args";
 import { Id } from "./stores/generic-types";
 
@@ -98,25 +104,55 @@ export const addKeyBoardShortcuts = (
 const googleRegEx = new RegExp("^https://www.google.com/search?");
 const EmptyBounds: Electron.Rectangle = { x: 0, y: 0, width: 0, height: 0 };
 
+export const addBrowserViewEvents = (
+  mullionWindow: IMullionWindow,
+  browserView: BrowserView,
+  options: { browserViewId: Id; primary: boolean }
+): void => {
+  const { webContents } = browserView;
+  const { browserViewId, primary } = options;
+
+  const sendActionToMullionWindow = (action: ITabAction) =>
+    sendActionToRenderer(mullionWindow.browserWindow.webContents, action);
+
+  // if true loading events are ignored on the next load.  Used when opening a secondary link so the primary browser doesn't update the loader state.
+  let ignoreNextLoad = false;
+
+  // possible events to listen to:
+  // did-finish-load did-fail-load page-title-updated page-favicon-updated new-window will-prevent-unload render-process-gone unresponsive responsive certificate-error login
+  // media-started-playing media-paused update-target-url context-menu select-bluetooth-device console-message
+  webContents.on("will-navigate", (e, url) => {
+    const openInSecondaryWindow = primary && !googleRegEx.test(url);
+    ignoreNextLoad = openInSecondaryWindow;
+    if (openInSecondaryWindow) {
+      sendActionToMullionWindow(testSecondaryLinkFromPrimary(browserViewId, { url }));
+      e.preventDefault();
+    } else {
+      sendActionToMullionWindow(browserViewEventAction(browserViewId, { name: "will-navigate", url }));
+    }
+  });
+  webContents.on("did-start-loading", () => {
+    if (!ignoreNextLoad) {
+      sendActionToMullionWindow(browserViewEventAction(browserViewId, { name: "did-start-loading" }));
+    }
+  });
+  webContents.on("did-stop-loading", () =>
+    sendActionToMullionWindow(browserViewEventAction(browserViewId, { name: "did-stop-loading" }))
+  );
+  webContents.on("did-navigate", (e, url, httpResponseCode) =>
+    sendActionToMullionWindow(browserViewEventAction(browserViewId, { name: "did-navigate", url, httpResponseCode }))
+  );
+};
+
 export const createBrowserView = (
   mullionWindow: IMullionWindow,
   options: { browserViewId: Id; primary: boolean }
 ): void => {
-  const { browserViewId, primary } = options;
+  const { browserViewId } = options;
   const browserView = new BrowserView();
-  if (primary) {
-    browserView.webContents.addListener("will-navigate", (e, url) => {
-      if (!googleRegEx.test(url)) {
-        sendActionToRenderer(
-          mullionWindow.browserWindow.webContents,
-          testSecondaryLinkFromPrimary(browserViewId, { url })
-        );
-        e.preventDefault();
-      }
-    });
-  }
-  browserView.setBounds(EmptyBounds);
+  addBrowserViewEvents(mullionWindow, browserView, options);
   addKeyBoardShortcuts(browserView.webContents, mullionWindow.browserWindow.webContents);
+  browserView.setBounds(EmptyBounds);
   mullionWindow.browserViews[browserViewId] = browserView;
   mullionWindow.browserWindow.addBrowserView(browserView);
 };
@@ -164,11 +200,35 @@ export const closeBrowserView = (mullionWindow: IMullionWindow, options: { brows
 export const navigateToUrl = (mullionWindow: IMullionWindow, options: { browserViewId: Id; url: string }): void => {
   const { browserViewId, url } = options;
   const browserView = mullionWindow.browserViews[browserViewId];
+  console.log("navigateToUrl", options);
   if (browserView) {
-    browserView.webContents.loadURL(url).catch(console.error);
+    if (isInternalUrl(url)) {
+      sendActionToRenderer(
+        mullionWindow.browserWindow.webContents,
+        browserViewEventAction(browserViewId, { name: "will-navigate", url })
+      );
+    } else {
+      browserView.webContents.loadURL(url).catch(console.error);
+    }
   }
 };
 
 export const closeWindow = (mullionWindow: IMullionWindow): void => {
   mullionWindow.browserWindow.close();
+};
+
+export const reload = (mullionWindow: IMullionWindow, options: { browserViewId: Id }): void => {
+  const { browserViewId } = options;
+  const browserView = mullionWindow.browserViews[browserViewId];
+  if (browserView) {
+    browserView.webContents.reload();
+  }
+};
+
+export const stop = (mullionWindow: IMullionWindow, options: { browserViewId: Id }): void => {
+  const { browserViewId } = options;
+  const browserView = mullionWindow.browserViews[browserViewId];
+  if (browserView) {
+    browserView.webContents.stop();
+  }
 };

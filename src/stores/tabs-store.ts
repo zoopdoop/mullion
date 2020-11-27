@@ -3,15 +3,18 @@ import { WritableDraft } from "immer/dist/internal";
 
 import { Id } from "./generic-types";
 import { INewAppTab, INewSecondaryTab, ITabAction } from "../actions/tab-actions";
-import { IAppTab, ISecondaryTab } from "./tab-models";
+import { IAppTab, IBrowserTab, ISecondaryTab } from "./tab-models";
 import {
   closeBrowserView,
   closeWindowAction,
   createBrowserView,
   navigateToUrlAction,
+  reloadAction,
+  stopAction,
 } from "../actions/main-process-actions";
 import { electronContextBridge } from "../lib/get-electron-context-bridge";
 import getId from "../lib/get-id";
+import { INTERNAL_START_URL } from "../lib/internal-urls";
 
 export interface ITabsState {
   appTabs: IAppTab[];
@@ -25,10 +28,15 @@ export interface ITabsStateStore {
 
 const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
   const firstSecondaryTab = newAppTab?.secondaryTabs ? newAppTab?.secondaryTabs[0] : undefined;
+  const url = newAppTab?.url || INTERNAL_START_URL;
+  const history = [url];
   return {
     id,
     title: newAppTab?.title || "New Tab",
-    url: newAppTab?.url || null,
+    url,
+    history,
+    historyIndex: 0,
+    state: "loaded",
     secondaryTabs: newAppTab?.secondaryTabs || [],
     selectedSecondaryTabId: firstSecondaryTab?.id,
     splitter: {
@@ -38,10 +46,15 @@ const createAppTab = (id: Id, newAppTab?: INewAppTab): IAppTab => {
 };
 
 const createSecondaryTab = (id: Id, newSecondaryTab?: INewSecondaryTab): ISecondaryTab => {
+  const url = newSecondaryTab?.url || INTERNAL_START_URL;
+  const history = [url];
   return {
     id,
     title: newSecondaryTab?.title || "New Tab",
-    url: newSecondaryTab?.url || null,
+    url,
+    history,
+    historyIndex: 0,
+    state: "loaded",
   };
 };
 
@@ -56,6 +69,40 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
     const index = getAppTabIndex(appTabId);
     if (index !== -1) {
       updater(draft.appTabs[index]);
+    }
+  };
+
+  // TODO: redo with map in state
+  const getBrowserTab = (tabId: Id): IBrowserTab | undefined => {
+    for (let appTabIndex = 0; appTabIndex < draft.appTabs.length; appTabIndex++) {
+      if (draft.appTabs[appTabIndex].id === tabId) {
+        return draft.appTabs[appTabIndex];
+      }
+      for (
+        let secondaryTabIndex = 0;
+        secondaryTabIndex < draft.appTabs[appTabIndex].secondaryTabs.length;
+        secondaryTabIndex++
+      ) {
+        if (draft.appTabs[appTabIndex].secondaryTabs[secondaryTabIndex].id === tabId) {
+          return draft.appTabs[appTabIndex].secondaryTabs[secondaryTabIndex];
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const updateBrowserTab = (tabId: Id, updater: (tab: WritableDraft<IBrowserTab>) => void) => {
+    const browserTab = getBrowserTab(tabId);
+    if (browserTab) {
+      updater(browserTab);
+    }
+  };
+
+  const addToHistory = (tab: IBrowserTab, url: string): void => {
+    if (tab.history[tab.historyIndex] !== url) {
+      tab.historyIndex = Math.min(tab.historyIndex + 1, tab.history.length);
+      tab.history.splice(tab.historyIndex, tab.history.length);
+      tab.history[tab.historyIndex] = url;
     }
   };
 
@@ -131,10 +178,67 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       break;
 
     case "navigateToUrl":
-      updateAppTab(action.value.browserViewId, appTab => {
-        electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(appTab, action.value.url));
-        appTab.url = action.value.url;
+      updateBrowserTab(action.value.browserViewId, tab => {
+        electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(tab, action.value.url));
+        tab.url = action.value.url;
+        addToHistory(tab, action.value.url);
       });
+      break;
+
+    case "browserViewEvent":
+      updateBrowserTab(action.value.browserViewId, tab => {
+        switch (action.value.event.name) {
+          case "did-start-loading":
+            tab.state = "loading";
+            break;
+          case "did-stop-loading":
+            tab.state = "loaded";
+            break;
+          case "will-navigate":
+            console.log("will-navigate", action);
+            // on initial navigation update url and save to history to update ui
+            tab.url = action.value.event.url;
+            addToHistory(tab, action.value.event.url);
+            break;
+          case "did-navigate":
+            console.log("did-navigate", action);
+            // on forward/back update url
+            tab.url = action.value.event.url;
+            break;
+        }
+      });
+      break;
+
+    case "goBack":
+      updateBrowserTab(action.value.browserViewId, tab => {
+        if (tab.historyIndex - 1 >= 0) {
+          tab.historyIndex--;
+          electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(tab, tab.history[tab.historyIndex]));
+        }
+      });
+      break;
+
+    case "goForward":
+      updateBrowserTab(action.value.browserViewId, tab => {
+        if (tab.historyIndex + 1 < tab.history.length) {
+          tab.historyIndex++;
+          electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(tab, tab.history[tab.historyIndex]));
+        }
+      });
+      break;
+
+    case "goHome":
+      updateBrowserTab(action.value.browserViewId, tab => {
+        electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(tab, INTERNAL_START_URL));
+      });
+      break;
+
+    case "reload":
+      electronContextBridge?.sendActionToMainProcess(reloadAction(action.value.browserViewId));
+      break;
+
+    case "stop":
+      electronContextBridge?.sendActionToMainProcess(stopAction(action.value.browserViewId));
       break;
   }
 

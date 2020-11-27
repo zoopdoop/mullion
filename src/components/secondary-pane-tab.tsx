@@ -15,7 +15,7 @@ const SecondaryPaneTab: React.FC<Props> = ({ appTab, secondaryTab, visible }) =>
   return (
     <div className={className}>
       <SecondaryPaneTabToolbar appTab={appTab} secondaryTab={secondaryTab} visible={visible} />
-      <DummyPane appTab={appTab} secondaryTab={secondaryTab} url={secondaryTab.url} visible={visible} />
+      <DummyPane tab={appTab} secondaryTab={secondaryTab} url={secondaryTab.url} visible={visible} />
     </div>
   );
 };

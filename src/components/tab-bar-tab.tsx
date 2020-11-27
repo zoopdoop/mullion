@@ -1,18 +1,18 @@
 import React from "react";
 import generateClassName from "../lib/generate-classname";
-import { IAppTab } from "../stores/tab-models";
+import { IAppTab, ISecondaryTab } from "../stores/tab-models";
 
 interface Props {
-  appTab: IAppTab;
+  tab: IAppTab | ISecondaryTab;
   selected: boolean;
-  selectAppTab: (appTab: IAppTab) => void;
-  closeAppTab: (appTab: IAppTab) => void;
+  onSelectTab: (tab: IAppTab | ISecondaryTab) => void;
+  onCloseTab: (tab: IAppTab | ISecondaryTab) => void;
 }
 
-const AppTabBarTab: React.FC<Props> = ({ appTab, selected, selectAppTab, closeAppTab }) => {
-  const selectTab = () => selectAppTab(appTab);
+const TabBarTab: React.FC<Props> = ({ tab, selected, onSelectTab, onCloseTab }) => {
+  const selectTab = () => onSelectTab(tab);
   const closeTab = (e: React.MouseEvent<HTMLSpanElement>) => {
-    closeAppTab(appTab);
+    onCloseTab(tab);
     e.stopPropagation();
   };
   const handleKeyDownSelectTab = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -22,15 +22,15 @@ const AppTabBarTab: React.FC<Props> = ({ appTab, selected, selectAppTab, closeAp
   };
   const handleKeyDownCloseTab = (e: React.KeyboardEvent<HTMLSpanElement>) => {
     if (e.key === "Enter") {
-      closeAppTab(appTab);
+      onCloseTab(tab);
       e.stopPropagation();
     }
   };
 
-  const className = generateClassName("app-tab-bar-tab", { selected });
+  const className = generateClassName("tab-bar-tab", { selected });
   return (
     <div className={className} role="button" tabIndex={0} onClick={selectTab} onKeyDown={handleKeyDownSelectTab}>
-      {appTab.title}
+      {tab.title}
       <span className="close" role="button" tabIndex={0} onClick={closeTab} onKeyDown={handleKeyDownCloseTab}>
         ×
       </span>
@@ -38,4 +38,4 @@ const AppTabBarTab: React.FC<Props> = ({ appTab, selected, selectAppTab, closeAp
   );
 };
 
-export default AppTabBarTab;
+export default TabBarTab;

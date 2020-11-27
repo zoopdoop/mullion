@@ -26,7 +26,7 @@ const AppTabPanes: React.FC<Props> = ({ appTab, visible }) => {
     return (
       <>
         <PrimaryPane key={`primary-pane-${appTab.id}`} appTab={appTab} visible={visible} />
-        <Splitter />
+        <Splitter key={`splitter-${appTab.id}`} />
         <SecondaryPane key={`secondary-pane-${appTab.id}`} appTab={appTab} visible={visible} />
       </>
     );

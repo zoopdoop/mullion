@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { addAndSelectAppTabAction, closeAppTabAction, selectAppTabAction } from "../actions/tab-actions";
-import { IAppTab } from "../stores/tab-models";
+import { IAppTab, ISecondaryTab } from "../stores/tab-models";
 import { Id } from "../stores/generic-types";
 import { RootStoreContext } from "../stores/root-store";
-import AppTabBarTab from "./app-tab-bar-tab";
+import TabBar from "./tab-bar";
 
 interface Props {
   tabs: IAppTab[];
@@ -13,24 +13,19 @@ interface Props {
 const AppTabBar: React.FC<Props> = ({ tabs, selectedAppTabId }) => {
   const { dispatch } = useContext(RootStoreContext);
 
-  const addTab = () => dispatch(addAndSelectAppTabAction());
-  const selectAppTab = (appTab: IAppTab) => dispatch(selectAppTabAction(appTab));
-  const closeAppTab = (appTab: IAppTab) => dispatch(closeAppTabAction(appTab));
+  const handleAddAppTab = () => dispatch(addAndSelectAppTabAction());
+  const handleSelectAppTab = (appTab: IAppTab | ISecondaryTab) => dispatch(selectAppTabAction(appTab as IAppTab));
+  const handleCloseAppTab = (appTab: IAppTab | ISecondaryTab) => dispatch(closeAppTabAction(appTab as IAppTab));
 
   return (
     <div className="app-tab-bar">
-      {tabs.map(tab => (
-        <AppTabBarTab
-          key={tab.id}
-          appTab={tab}
-          selected={tab.id === selectedAppTabId}
-          selectAppTab={selectAppTab}
-          closeAppTab={closeAppTab}
-        />
-      ))}
-      <button className="app-tab-bar-add-button" onClick={addTab}>
-        +
-      </button>
+      <TabBar
+        tabs={tabs}
+        selectedTabId={selectedAppTabId}
+        onAddTab={handleAddAppTab}
+        onSelectTab={handleSelectAppTab}
+        onCloseTab={handleCloseAppTab}
+      />
     </div>
   );
 };

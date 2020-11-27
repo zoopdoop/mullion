@@ -12,7 +12,6 @@ import {
 
 export const addIPCMainListeners = (): void => {
   ipcMain.on(SendActionFromRendererProcessMessage as any, (e, wrappedAction: IWrappedMainProcessAction) => {
-    console.log("GOT", SendActionFromRendererProcessMessage, wrappedAction);
     const { windowId, action } = wrappedAction;
     const mullionWindow = mullionWindows.get(windowId);
 

@@ -11,8 +11,8 @@ interface Props {
 const SecondaryPane: React.FC<Props> = ({ appTab, visible }) => {
   return (
     <div className="secondary-pane">
-      <SecondaryPaneTabBar appTab={appTab} visible={visible} />
-      <SecondaryPaneTabs appTab={appTab} visible={visible} />
+      <SecondaryPaneTabBar key={`secondary-pane-toolbar-${appTab.id}`} appTab={appTab} visible={visible} />
+      <SecondaryPaneTabs key={`secondary-pane-tabs-${appTab.id}`} appTab={appTab} visible={visible} />
     </div>
   );
 };

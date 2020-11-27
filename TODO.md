@@ -8,8 +8,6 @@
 
 ### Todo
 
-- [ ] Implement SecondaryPaneTabBar/Tabs  
-- [ ] Implement partial SecondaryPaneInfo (show url)  
 - [ ] Update DummyPane to not show anything until after a timeout
 - [ ] Hook up events to navigation UI (url, back, forward, reload/loading, ssl status)
 - [ ] Hook up page-title-updated event to tab and limit tab width
@@ -19,9 +17,11 @@
 
 ### In Progress
 
+- [ ] Implement partial SecondaryPaneInfo (show url)  
 
 ### Done ✓
 
+- [x] Implement SecondaryPaneTabBar/Tabs  
 - [x] Add close window/app on last tab close
 - [x] Update ids to use multiple windows
 - [x] Add multiple window handling to main process

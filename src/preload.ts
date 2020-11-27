@@ -13,10 +13,7 @@ const windowId = getWindowId() || "unknown";
 
 const electronContextBridge: IElectronContextBridge = {
   onActionFromMainProcess: (callback: (action: IRendererAction) => void) => {
-    ipcRenderer.on(SendActionFromMainProcessMessage, (e, action) => {
-      console.log("GOT", action);
-      callback(action);
-    });
+    ipcRenderer.on(SendActionFromMainProcessMessage, (e, action) => callback(action));
   },
   sendActionToMainProcess: (action: IMainProcessActions) => {
     const wrappedAction: IWrappedMainProcessAction = { windowId, action };

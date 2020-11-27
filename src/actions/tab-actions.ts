@@ -16,6 +16,20 @@ export type ITabAction =
         newSecondaryTab?: INewSecondaryTab;
         select?: boolean;
       };
+    }
+  | {
+      type: "selectSecondaryTab";
+      value: {
+        appTabId: Id;
+        secondaryTabId: Id;
+      };
+    }
+  | {
+      type: "closeSecondaryTab";
+      value: {
+        appTabId: Id;
+        secondaryTabId: Id;
+      };
     };
 
 export const addAppTabAction = (newAppTab?: INewAppTab): ITabAction => ({
@@ -46,6 +60,15 @@ export const addAndSelectSecondaryTabAction = (appTab: IAppTab, newSecondaryTab?
   type: "addSecondaryTab",
   value: { appTabId: appTab.id, newSecondaryTab, select: true },
 });
+export const selectSecondaryTabAction = (appTab: IAppTab, secondaryTab: ISecondaryTab): ITabAction => ({
+  type: "selectSecondaryTab",
+  value: { appTabId: appTab.id, secondaryTabId: secondaryTab.id },
+});
+export const closeSecondaryTabAction = (appTab: IAppTab, secondaryTab: ISecondaryTab): ITabAction => ({
+  type: "closeSecondaryTab",
+  value: { appTabId: appTab.id, secondaryTabId: secondaryTab.id },
+});
+
 export const testSecondaryLinkFromPrimary = (appTabId: Id, newSecondaryTab?: INewSecondaryTab): ITabAction => ({
   type: "addSecondaryTab",
   value: { appTabId, newSecondaryTab, select: true },

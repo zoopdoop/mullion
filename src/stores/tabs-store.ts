@@ -91,6 +91,10 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       draft.selectedAppTabId = action.value.appTabId;
       break;
 
+    case "selectSecondaryTab":
+      updateAppTab(action.value.appTabId, appTab => (appTab.selectedSecondaryTabId = action.value.secondaryTabId));
+      break;
+
     case "closeAppTab":
       const numAppTabs = draft.appTabs.length;
       if (numAppTabs > 1) {
@@ -106,6 +110,24 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       } else {
         electronContextBridge?.sendActionToMainProcess(closeWindowAction());
       }
+      break;
+
+    case "closeSecondaryTab":
+      updateAppTab(action.value.appTabId, appTab => {
+        const index = appTab.secondaryTabs.findIndex(secondaryTab => secondaryTab.id === action.value.secondaryTabId);
+        if (index !== -1) {
+          const secondaryTab = appTab.secondaryTabs[index];
+          appTab.secondaryTabs.splice(index, 1);
+          if (action.value.secondaryTabId === appTab.selectedSecondaryTabId) {
+            if (appTab.secondaryTabs.length > 0) {
+              appTab.selectedSecondaryTabId = (appTab.secondaryTabs[index] || appTab.secondaryTabs[index - 1]).id;
+            } else {
+              appTab.selectedSecondaryTabId = undefined;
+            }
+          }
+          electronContextBridge?.sendActionToMainProcess(closeBrowserView(secondaryTab));
+        }
+      });
       break;
 
     case "navigateToUrl":

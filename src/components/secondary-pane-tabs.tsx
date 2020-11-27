@@ -8,15 +8,14 @@ interface Props {
 }
 
 const SecondaryPaneTabs: React.FC<Props> = ({ appTab, visible }) => {
-  // TODO: fix visible check when pane tabs control is done
   return (
     <div className="secondary-pane-tabs">
-      {appTab.secondaryTabs.map((secondaryTab, index) => (
+      {appTab.secondaryTabs.map(secondaryTab => (
         <SecondaryPaneTab
           key={secondaryTab.id}
           appTab={appTab}
           secondaryTab={secondaryTab}
-          visible={visible && index === appTab.secondaryTabs.length - 1}
+          visible={visible && appTab.selectedSecondaryTabId === secondaryTab.id}
         />
       ))}
     </div>

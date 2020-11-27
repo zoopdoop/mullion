@@ -66,7 +66,6 @@ export const createMullionWindow = (): void => {
 };
 
 const sendActionToRenderer = (webContents: Electron.WebContents, action: IRendererAction) => {
-  console.log("SENDING", action);
   webContents.send(SendActionFromMainProcessMessage, action);
 };
 

@@ -32,7 +32,7 @@ App
           SecondaryPaneTabs
             SecondaryPaneTab
               SecondaryPaneTabToolbar
-                SecondaryPaneInfo
+                PaneNavigation
               DummyPane
 ```
 

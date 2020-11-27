@@ -8,7 +8,7 @@ export type ITabAction =
   | { type: "addAppTab"; value: { newAppTab?: INewAppTab; select?: boolean } }
   | { type: "selectAppTab"; value: { appTabId: Id } }
   | { type: "closeAppTab"; value: { appTabId: Id } }
-  | { type: "navigateToUrl"; value: { appTabId: Id; url: string } }
+  | { type: "navigateToUrl"; value: { browserViewId: Id; url: string } }
   | {
       type: "addSecondaryTab";
       value: {
@@ -48,9 +48,9 @@ export const closeAppTabAction = (appTab: IAppTab): ITabAction => ({
   type: "closeAppTab",
   value: { appTabId: appTab.id },
 });
-export const navigateToUrlAction = (appTab: IAppTab, url: string): ITabAction => ({
+export const navigateToUrlAction = (tab: IAppTab | ISecondaryTab, url: string): ITabAction => ({
   type: "navigateToUrl",
-  value: { appTabId: appTab.id, url },
+  value: { browserViewId: tab.id, url },
 });
 export const addSecondaryTabAction = (appTab: IAppTab, newSecondaryTab?: INewSecondaryTab): ITabAction => ({
   type: "addSecondaryTab",

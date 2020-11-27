@@ -9,7 +9,7 @@ interface Props {
 const AppTabToolbar: React.FC<Props> = ({ appTab }) => {
   return (
     <div className="app-tab-toolbar">
-      <PaneNavigation appTab={appTab} />
+      <PaneNavigation tab={appTab} />
     </div>
   );
 };

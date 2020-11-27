@@ -131,7 +131,7 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
       break;
 
     case "navigateToUrl":
-      updateAppTab(action.value.appTabId, appTab => {
+      updateAppTab(action.value.browserViewId, appTab => {
         electronContextBridge?.sendActionToMainProcess(navigateToUrlAction(appTab, action.value.url));
         appTab.url = action.value.url;
       });

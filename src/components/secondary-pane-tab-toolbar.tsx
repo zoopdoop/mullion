@@ -1,6 +1,6 @@
 import React from "react";
 import { IAppTab, ISecondaryTab } from "../stores/tab-models";
-import SecondaryPaneInfo from "./secondary-pane-info";
+import PaneNavigation from "./pane-navigation";
 
 interface Props {
   appTab: IAppTab;
@@ -11,7 +11,7 @@ interface Props {
 const SecondaryPaneTabToolbar: React.FC<Props> = ({ appTab, secondaryTab, visible }) => {
   return (
     <div className="secondary-pane-tab-toolbar">
-      <SecondaryPaneInfo appTab={appTab} secondaryTab={secondaryTab} visible={visible} />
+      <PaneNavigation tab={secondaryTab} />
     </div>
   );
 };

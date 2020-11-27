@@ -1,5 +1,5 @@
 import React from "react";
-import { IAppTab, IBrowserTab } from "../../stores/tab-models";
+import { IBrowserTab } from "../../stores/tab-models";
 
 interface Props {
   tab: IBrowserTab;

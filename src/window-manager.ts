@@ -1,4 +1,4 @@
-import { BrowserWindow, BrowserView, app, ipcMain } from "electron";
+import { BrowserWindow, BrowserView, app } from "electron";
 import * as path from "path";
 import { IBounds } from "./actions/main-process-actions";
 

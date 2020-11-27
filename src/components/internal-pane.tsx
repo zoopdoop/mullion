@@ -1,7 +1,6 @@
 import React from "react";
-import { render } from "react-dom";
-import { INTERNAL_START_URL, isInternalUrl } from "../lib/internal-urls";
-import { IAppTab, IBrowserTab } from "../stores/tab-models";
+import { INTERNAL_START_URL } from "../lib/internal-urls";
+import { IBrowserTab } from "../stores/tab-models";
 import InternalStartPane from "./internal-panes/internal-start-pane";
 import InternalUnknownPane from "./internal-panes/internal-unknown-pane";
 

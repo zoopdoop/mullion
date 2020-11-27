@@ -13,7 +13,7 @@ interface Props {
   visible: boolean;
 }
 
-const SecondaryPaneTabBar: React.FC<Props> = ({ appTab, visible }) => {
+const SecondaryPaneTabBar: React.FC<Props> = ({ appTab }) => {
   const { dispatch } = useContext(RootStoreContext);
 
   const handleAddSecondaryTab = () => dispatch(addAndSelectSecondaryTabAction(appTab));

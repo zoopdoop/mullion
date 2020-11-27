@@ -8,7 +8,7 @@ interface Props {
   visible: boolean;
 }
 
-const SecondaryPaneTabToolbar: React.FC<Props> = ({ appTab, secondaryTab, visible }) => {
+const SecondaryPaneTabToolbar: React.FC<Props> = ({ secondaryTab }) => {
   return (
     <div className="secondary-pane-tab-toolbar">
       <PaneNavigation tab={secondaryTab} />

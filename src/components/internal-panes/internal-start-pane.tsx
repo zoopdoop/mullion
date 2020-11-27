@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { navigateToUrlAction } from "../../actions/tab-actions";
 import { generateSearchUrl } from "../../lib/generate-search-url";
-import { IAppTab, IBrowserTab } from "../../stores/tab-models";
+import { IBrowserTab } from "../../stores/tab-models";
 import { RootStoreContext } from "../../stores/root-store";
 
 interface Props {

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import PrimaryPane from "./primary-pane";
+import Pane from "./pane";
 import Splitter from "./splitter";
-import SecondaryPane from "./secondary-pane";
+import SecondaryPanes from "./secondary-panes";
 import { IAppTab } from "../stores/tab-models";
 import { hideBrowserView } from "../actions/main-process-actions";
 import { electronContextBridge } from "../lib/get-electron-context-bridge";
@@ -20,14 +20,14 @@ const AppTabPanes: React.FC<Props> = ({ appTab, visible }) => {
 
   const renderPanes = () => {
     if (appTab.secondaryTabs.length === 0) {
-      return <PrimaryPane key={appTab.id} appTab={appTab} visible={visible} />;
+      return <Pane key={appTab.id} tab={appTab} visible={visible} primary={true} />;
     }
 
     return (
       <>
-        <PrimaryPane key={`primary-pane-${appTab.id}`} appTab={appTab} visible={visible} />
+        <Pane key={`primary-pane-${appTab.id}`} tab={appTab} visible={visible} primary={true} />
         <Splitter key={`splitter-${appTab.id}`} />
-        <SecondaryPane key={`secondary-pane-${appTab.id}`} appTab={appTab} visible={visible} />
+        <SecondaryPanes key={`secondary-pane-${appTab.id}`} appTab={appTab} visible={visible} />
       </>
     );
   };

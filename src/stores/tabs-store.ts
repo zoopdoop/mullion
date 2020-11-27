@@ -195,13 +195,11 @@ export const tabsReducer = produce((draft: Draft<ITabsState>, action: ITabAction
             tab.state = "loaded";
             break;
           case "will-navigate":
-            console.log("will-navigate", action);
             // on initial navigation update url and save to history to update ui
             tab.url = action.value.event.url;
             addToHistory(tab, action.value.event.url);
             break;
           case "did-navigate":
-            console.log("did-navigate", action);
             // on forward/back update url
             tab.url = action.value.event.url;
             break;

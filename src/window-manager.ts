@@ -200,7 +200,6 @@ export const closeBrowserView = (mullionWindow: IMullionWindow, options: { brows
 export const navigateToUrl = (mullionWindow: IMullionWindow, options: { browserViewId: Id; url: string }): void => {
   const { browserViewId, url } = options;
   const browserView = mullionWindow.browserViews[browserViewId];
-  console.log("navigateToUrl", options);
   if (browserView) {
     if (isInternalUrl(url)) {
       sendActionToRenderer(

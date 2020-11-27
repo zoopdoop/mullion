@@ -2,37 +2,38 @@ import React, { useEffect } from "react";
 import { hideBrowserView } from "../actions/main-process-actions";
 import { electronContextBridge } from "../lib/get-electron-context-bridge";
 import { INTERNAL_START_URL, isInternalUrl } from "../lib/internal-urls";
-import { IAppTab } from "../stores/tab-models";
+import { IBrowserTab } from "../stores/tab-models";
 import DummyPane from "./dummy-pane";
 import InternalPane from "./internal-pane";
 
 interface Props {
-  appTab: IAppTab;
+  tab: IBrowserTab;
   visible: boolean;
+  primary: boolean;
 }
 
 const getUrl = (url: string | null) => url || INTERNAL_START_URL;
 
-const PrimaryPane: React.FC<Props> = ({ appTab, visible }) => {
+const Pane: React.FC<Props> = ({ tab, visible, primary }) => {
   useEffect(() => {
-    if (visible && isInternalUrl(getUrl(appTab.url))) {
-      electronContextBridge?.sendActionToMainProcess(hideBrowserView(true));
+    if (visible && isInternalUrl(getUrl(tab.url))) {
+      electronContextBridge?.sendActionToMainProcess(hideBrowserView(primary));
     }
-  }, [appTab, visible]);
+  }, [tab, visible, primary]);
 
   const renderPane = () => {
-    const url = getUrl(appTab.url);
+    const url = getUrl(tab.url);
     if (isInternalUrl(url)) {
-      return <InternalPane key={appTab.id} tab={appTab} url={url} />;
+      return <InternalPane key={tab.id} tab={tab} url={url} />;
     }
-    return <DummyPane key={appTab.id} tab={appTab} visible={visible} />;
+    return <DummyPane key={tab.id} tab={tab} visible={visible} primary={primary} />;
   };
 
   return (
-    <div className="primary-pane" key={appTab.id}>
+    <div className="pane" key={tab.id}>
       {renderPane()}
     </div>
   );
 };
 
-export default PrimaryPane;
+export default Pane;

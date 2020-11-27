@@ -1,8 +1,8 @@
 import React from "react";
 import SecondaryPaneTabToolbar from "./secondary-pane-tab-toolbar";
-import DummyPane from "./dummy-pane";
 import { IAppTab, ISecondaryTab } from "../stores/tab-models";
 import generateClassName from "../lib/generate-classname";
+import Pane from "./pane";
 
 interface Props {
   appTab: IAppTab;
@@ -14,8 +14,13 @@ const SecondaryPaneTab: React.FC<Props> = ({ appTab, secondaryTab, visible }) =>
   const className = generateClassName("secondary-pane-tab", { hidden: !visible });
   return (
     <div className={className}>
-      <SecondaryPaneTabToolbar appTab={appTab} secondaryTab={secondaryTab} visible={visible} />
-      <DummyPane tab={appTab} secondaryTab={secondaryTab} url={secondaryTab.url} visible={visible} />
+      <SecondaryPaneTabToolbar
+        key={`secondary-pane-tab-toolbar-${appTab.id}`}
+        appTab={appTab}
+        secondaryTab={secondaryTab}
+        visible={visible}
+      />
+      <Pane tab={secondaryTab} key={`secondary-pane-${secondaryTab.id}`} visible={visible} primary={false} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ const SecondaryPaneTabs: React.FC<Props> = ({ appTab, visible }) => {
     <div className="secondary-pane-tabs">
       {appTab.secondaryTabs.map(secondaryTab => (
         <SecondaryPaneTab
-          key={secondaryTab.id}
+          key={`secondary-pane-tab-${secondaryTab.id}`}
           appTab={appTab}
           secondaryTab={secondaryTab}
           visible={visible && appTab.selectedSecondaryTabId === secondaryTab.id}

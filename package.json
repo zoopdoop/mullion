@@ -42,7 +42,7 @@
   },
   "repository": "https://github.com/zoopdoop/mullion",
   "author": "Doug Martin",
-  "license": "MIT",
+  "license": "MPL-2.0",
   "devDependencies": {
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",

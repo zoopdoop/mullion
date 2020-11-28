@@ -8,7 +8,6 @@
 
 ### Todo
 
-- [ ] Switch from MIT to MPL
 - [ ] Update DummyPane to not show anything until after a timeout
 - [ ] Hook up page-title-updated event to tab and limit tab width
 - [ ] Extend partial PrimaryPane (add push to secondary url list using control click)  
@@ -17,10 +16,11 @@
 
 ### In Progress
 
-- [ ] Hook up events to navigation UI (url, back, forward, reload/loading, ssl status)
 
 ### Done ✓
 
+- [x] Switch from MIT to MPL
+- [x] Hook up events to navigation UI (url, back, forward, reload/loading)
 - [x] Implement partial SecondaryPaneInfo (show url)  
 - [x] Implement SecondaryPaneTabBar/Tabs  
 - [x] Add close window/app on last tab close

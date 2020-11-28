@@ -9,4 +9,4 @@ This is a multi-pane browser powered by Electron.  It is currently is pre-alpha 
 
 ## License
 
-[MIT](LICENSE.md)
+All files are released until the [MPL v2](LICENSE.md) license.
